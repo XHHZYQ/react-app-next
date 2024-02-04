@@ -1,4 +1,4 @@
-import ATable from '../../components/ATable';
+import ATable, { getTableList } from '../../components/ATable';
 import { getCourseWareList } from '../../api/index.js';
 
 // await getCourseWareList().then(({ data: { content }}) => { // 方便用来调试
@@ -20,22 +20,23 @@ const columns = [
     dataIndex: 'lessonName',
   },
 ];
+const listApi = { requestFun: getCourseWareList };
 
 const MyTable = ({ list }) => {
-  const data = list.map(item => ({ ...item, key: item.classLessonId }));
-  console.log('table props', data);
-  return <ATable dataSource={data} columns={columns} />
+  return (
+    <div>
+      <ATable dataSource={list} columns={columns} listApi={listApi} />
+    </div>
+  )
 };
 
 export default MyTable;
 
 
 export const getStaticProps = async () => {
-  let { data: { content: { list = [] } } } = await getCourseWareList();
+  const list = await getTableList(listApi);
 
   return {
-    props: {
-      list
-    }
+    props: { list }
   };
 };
