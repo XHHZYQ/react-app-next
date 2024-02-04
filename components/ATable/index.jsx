@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, Input, Button } from 'antd';
+import { Table, Button } from 'antd';
 import TableSearch from './TableSearch';
 import Style from './index.module.scss';
 
@@ -21,6 +21,7 @@ export const getTableList = async ({ requestFun, initFetch = true, resultKey = '
 
   list = list.map(item => ({ ...item, key: item.classLessonId }));
 
+
   if (typeof afterHandle === 'function') {
     afterHandle(content);
   }
@@ -28,7 +29,47 @@ export const getTableList = async ({ requestFun, initFetch = true, resultKey = '
   return list
 }
 
-const ATable = ({ searchParams = {}, formList = [], tableData = [], columns, bordered = false, listApi, pagination = { position: 'bottomCenter' } }) => {
+// 按钮禁用判断
+const disabledHandle = (item) => {
+  if (typeof item.disabled === 'boolean') {
+    return item.disabled;
+  } else if (item.disabled === 'function') {
+    return item.disabled(row, item);
+  }
+};
+
+// 按钮显英判断
+const showHandle = (item) => {
+  if (typeof item.isShow === 'boolean') {
+    return item.isShow;
+  } else if (item.isShow === 'function') {
+    return item.disabled(row, item);
+  } else {
+    return true;
+  }
+};
+
+const setColumns = (columns, rowOperationList) => {
+  if (rowOperationList.length) {
+    const actions = {
+      title: '操作',
+      render: (text, record) => (
+        rowOperationList.map(item => (
+          showHandle(item) ?
+            <Button
+              onClick={() => item.handle(record, item)}
+              disabled={disabledHandle(item)}
+              type={item.type || 'primary'}
+            >{item.label}</Button> : null
+        ))
+      )
+    };
+
+    columns[columns.length - 1] = actions;
+  }
+};
+
+const ATable = ({ searchParams = {}, formList = [], tableData = [], columns, rowOperationList = [], bordered = false, listApi, pagination = { position: 'bottomCenter' } }) => {
   const [loading, setLoading] = useState(true);
   const [values, setValues] = useState(searchParams);
   const [dataSource, setDataSource] = useState(tableData);
@@ -40,6 +81,8 @@ const ATable = ({ searchParams = {}, formList = [], tableData = [], columns, bor
     };
   }, [dataSource]);
 
+  setColumns(columns, rowOperationList);
+
   const handleSearch = async () => {
     const list = await getTableList(listApi, values);
     setDataSource(list);
@@ -47,16 +90,6 @@ const ATable = ({ searchParams = {}, formList = [], tableData = [], columns, bor
 
   return (
     <div className={Style.ATableContainer}>
-      {/* <Input
-        placeholder="输入搜索条件"
-        value={values.classId}
-        onChange={(e) => setValues({ ...values, classId: e.target.value })}
-        style={{ width: 200, marginRight: 8 }}
-      />
-      <Button type="primary" onClick={handleSearch} icon={<SearchOutlined />}>
-        搜索
-      </Button> */}
-
       <TableSearch
         formList={formList}
       />

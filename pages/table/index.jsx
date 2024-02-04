@@ -14,13 +14,7 @@ const formList = [
     inputType: 'input',
     label: '输入框',
     model: 'name',
-    placeholder: '请输入。。',
-    rules: [
-      {
-        required: true,
-        message: '请输入姓名',
-      },
-    ]
+    placeholder: '请输入。。'
   },
   {
     inputType: 'select',
@@ -30,12 +24,6 @@ const formList = [
     onChange: (value) => {
       console.log(`selected ${value}`);
     },
-    rules: [
-      {
-        required: true,
-        message: 'Please input your username!',
-      },
-    ],
     options: [
       {
         value: 'jack',
@@ -58,6 +46,21 @@ const formList = [
   }
 ];
 
+const rowOperationList = [
+  {
+    label: '开始上课',
+    handle: (row) => { },
+    isShow: false,
+    disabled: (row) => false,
+    type: 'primary'
+  },
+  {
+    label: '课堂口令',
+    disabled: true,
+    type: 'warning'
+  }
+];
+
 const columns = [
   {
     title: "班级",
@@ -71,6 +74,10 @@ const columns = [
     title: "课程",
     dataIndex: "lessonName",
   },
+  {
+    title: "操作",
+    dataIndex: "action"
+  }
 ];
 const listApi = {
   requestFun: getCourseWareList,
@@ -98,6 +105,7 @@ const MyTable = ({ tableData }) => {
         formList={formList}
         tableData={tableData}
         columns={columns}
+        rowOperationList={rowOperationList}
         listApi={listApi}
       />
     </div>
