@@ -59,7 +59,6 @@ const MyForm = () => (
     <AForm
       formList={formList}
       initialValues={{ name: '我的名字', cityId: 'jack' }}
-      disabled={true}
       submitBtnText="提交"
       cancelBtnText="取消"
     />
