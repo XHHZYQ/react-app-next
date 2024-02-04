@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Table, Input, Button } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import TableSearch from './TableSearch';
+import Style from './index.module.scss';
 
 // 获取 table 数据
-export const getTableList = async ({ requestFun, beforeSubmit, responseHandle }, params = {}) => {
+export const getTableList = async ({ requestFun, initFetch = true, resultKey = 'list', beforeSubmit, responseHandle, afterHandle }, params = {}) => {
+  if (!initFetch) return;
   let values = { ...params };
   if (typeof beforeSubmit === 'function') {
     params = beforeSubmit(values);
@@ -11,7 +13,7 @@ export const getTableList = async ({ requestFun, beforeSubmit, responseHandle },
 
   const searchParams = { ...params, page: 1, limit: 10 };
   const { data: { content } } = await requestFun(searchParams);
-  let list = content.list
+  let list = content[resultKey];
 
   if (typeof responseHandle === 'function') {
     list = responseHandle(list);
@@ -26,13 +28,12 @@ export const getTableList = async ({ requestFun, beforeSubmit, responseHandle },
   return list
 }
 
-const ATable = ({ dataSource, columns, bordered = false, listApi, pagination = { position: 'bottomCenter' } }) => {
+const ATable = ({ searchParams = {}, formList = [], tableData = [], columns, bordered = false, listApi, pagination = { position: 'bottomCenter' } }) => {
   const [loading, setLoading] = useState(true);
-  const [searchText, setSearchText] = useState('');
-  const [tableData, setTableData] = useState(dataSource);
+  const [values, setValues] = useState(searchParams);
+  const [dataSource, setDataSource] = useState(tableData);
 
   useEffect(() => {
-    // console.log('table props', loading, Date.now());
     setLoading(false);
     return () => {
 
@@ -40,39 +41,31 @@ const ATable = ({ dataSource, columns, bordered = false, listApi, pagination = {
   }, [dataSource]);
 
   const handleSearch = async () => {
-    const params = { classId: searchText };
-    const list = await getTableList(listApi, params);
-    setTableData(list);
+    const list = await getTableList(listApi, values);
+    setDataSource(list);
   };
 
-  console.log('调用了 ATable。。');
   return (
-    <div style={{ marginBottom: 16 }}>
-      <Input
+    <div className={Style.ATableContainer}>
+      {/* <Input
         placeholder="输入搜索条件"
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
+        value={values.classId}
+        onChange={(e) => setValues({ ...values, classId: e.target.value })}
         style={{ width: 200, marginRight: 8 }}
       />
       <Button type="primary" onClick={handleSearch} icon={<SearchOutlined />}>
         搜索
-      </Button>
+      </Button> */}
+
+      <TableSearch
+        formList={formList}
+      />
 
 
-      <Table dataSource={tableData} columns={columns} loading={loading}
+      <Table dataSource={dataSource} columns={columns} loading={loading}
         bordered={bordered} pagination={pagination} />
     </div>
   );
 };
 
 export default ATable;
-
-// export const getStaticProps = async () => {
-//   let { data: { content: { list = [] } } } = await getCourseWareList();
-
-//   return {
-//     props: {
-//       list
-//     }
-//   };
-// };
