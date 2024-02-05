@@ -3,8 +3,8 @@ import { getCourseWareList } from "../../api/index.js";
 
 const searchParams = {
   lessonType: undefined,
-  classId: undefined,
-  lessonId: undefined,
+  classId: '492',
+  lessonId: '3',
   startTime: undefined,
   endTime: undefined,
 };
@@ -14,7 +14,11 @@ const formList = [
     inputType: 'input',
     label: '输入框',
     model: 'classId',
-    placeholder: '请输入。。'
+    placeholder: '请输入。。',
+    onChange: (e) => {
+      console.log('输入框 change', e.target.value);
+    },
+    // disabled: true
   },
   {
     inputType: 'select',
@@ -42,7 +46,7 @@ const rowOperationList = [
     label: '开始上课',
     handle: (row) => {
       console.log('点击开始上课');
-     },
+    },
     // isShow: true,
     // type: 'link'
     // disabled: false,

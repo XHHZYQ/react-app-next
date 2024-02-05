@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { ASelect, AInput } from '../FormItem/index.js';
 import { SearchOutlined } from '@ant-design/icons';
 
+
 const TableSearch = (props) => {
   const {
     formList = [],
     searchParams = {},
-    // initialValues = {},
     setTableList,
     layout = 'inline',
     size = 'middle',
@@ -26,7 +26,7 @@ const TableSearch = (props) => {
   const onValuesChange = (changedValues, allValues) => {
     setValues(allValues);
   };
-
+  console.log('searchParams', searchParams);
   return (
     <div style={{ marginBottom: '20px' }}>
       <Form
@@ -34,7 +34,7 @@ const TableSearch = (props) => {
         wrapperCol={wrapperCol}
         layout={layout}
         size={size}
-        initialValues={searchParams}
+        initialValues={values}
         labelAlign={labelAlign}
         onValuesChange={onValuesChange}
       >
@@ -42,16 +42,12 @@ const TableSearch = (props) => {
           if (item.inputType === 'input') {
             // 输入框
             return (
-              <Form.Item key={index} label={item.label} name={item.model} rules={item.rules}>
-                <AInput {...item} />
-              </Form.Item>
+              <AInput key={index} {...item} />
             );
           } else if (item.inputType === 'select') {
             // 选择框
             return (
-              <Form.Item key={index} label={item.label} name={item.model} rules={item.rules}>
-                <ASelect {...item} />
-              </Form.Item>
+              <ASelect key={index}  {...item} />
             );
           }
         })}

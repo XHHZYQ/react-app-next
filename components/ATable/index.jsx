@@ -61,6 +61,7 @@ const setColumns = (columns, rowOperationList) => {
         return rowOperationList.map((item, index) =>
           showHandle(record, item) ? (
             <Button
+              key={index}
               className={index > 0 ? Style.antBtnSpace : null }
               onClick={() => item.handle(record, item)}
               disabled={disabledHandle(record, item)}

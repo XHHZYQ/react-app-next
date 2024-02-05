@@ -1,5 +1,5 @@
 
-import ASelect from './ASelect/index.js';
-import AInput from './AInput/index.js';
+import ASelect from './ASelect/index.jsx';
+import AInput from './AInput/index.jsx';
 
 export { ASelect, AInput };

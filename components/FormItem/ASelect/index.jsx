@@ -1,11 +1,11 @@
 
-import { Select } from 'antd';
+import { Form, Select } from 'antd';
 import Style from './ASelect.module.scss';
 
 const ASelect = (props) => {
-  const { options, defaultValue, placeholder, onChange, showSearch = true, autoClearSearchValue = true, allowClear = true, disabled = false, popupClassName } = props;
+  const { label, model, rules,options, defaultValue, placeholder, onChange, showSearch = true, autoClearSearchValue = true, allowClear = true, disabled = false, popupClassName } = props;
   return (
-    <div className={Style.selectBox}>
+    <Form.Item label={label} name={model} rules={rules}>
       <Select
         defaultValue={defaultValue}
         placeholder={placeholder}
@@ -17,7 +17,7 @@ const ASelect = (props) => {
         disabled={disabled}
         popupClassName={popupClassName}
       />
-    </div>
+    </Form.Item>
   );
 };
 

@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import AForm from '../../components/AForm/index.js';
+import AForm from '../../components/AForm/index.jsx';
 import styles from './form.module.scss'
 
 const formList = [
