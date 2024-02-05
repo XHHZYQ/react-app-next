@@ -3,7 +3,6 @@ import { Select } from 'antd';
 import Style from './ASelect.module.scss';
 
 const ASelect = (props) => {
-  console.log('props。。', props);
   const { options, defaultValue, placeholder, onChange, showSearch = true, autoClearSearchValue = true, allowClear = true, disabled = false, popupClassName } = props;
   return (
     <div className={Style.selectBox}>

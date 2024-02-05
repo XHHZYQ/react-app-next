@@ -13,35 +13,26 @@ const formList = [
   {
     inputType: 'input',
     label: '输入框',
-    model: 'name',
+    model: 'classId',
     placeholder: '请输入。。'
   },
   {
     inputType: 'select',
     label: '选择框',
-    model: 'cityId',
+    model: 'lessonId',
     placeholder: '请选择。。',
     onChange: (value) => {
       console.log(`selected ${value}`);
     },
     options: [
       {
-        value: 'jack',
-        label: 'Jack',
+        "label": "图形化AI课",
+        "value": "3"
       },
       {
-        value: 'lucy',
-        label: 'Lucy',
-      },
-      {
-        value: 'Yiminghe',
-        label: 'yiminghe',
-      },
-      {
-        value: 'disabled',
-        label: 'Disabled',
-        disabled: true,
-      },
+        "label": "TDOG人工智能编程课程PYTHON版",
+        "value": "6"
+      }
     ]
   }
 ];
@@ -49,15 +40,20 @@ const formList = [
 const rowOperationList = [
   {
     label: '开始上课',
-    handle: (row) => { },
-    isShow: false,
-    disabled: (row) => false,
-    type: 'primary'
+    handle: (row) => {
+      console.log('点击开始上课');
+     },
+    // isShow: true,
+    // type: 'link'
+    // disabled: false,
   },
   {
     label: '课堂口令',
-    disabled: true,
-    type: 'warning'
+    handle: (row) => {
+      console.log('点击课堂口令');
+    },
+    // type: 'link'
+    // disabled: () => false,
   }
 ];
 
@@ -85,15 +81,12 @@ const listApi = {
   resultKey: 'list',
   beforeSubmit: (params) => {
     params.lessonType = "1";
-    // console.log("beforeSubmit。。", params);
     return params;
   },
   // responseHandle: (list) => {
-  //   console.log("responseHandle。。", list);
   //   return list.map(item => ({ ...item, key: item.classLessonId }));
   // },
   afterHandle: (content) => {
-    // console.log("afterHandle。。", content);
   },
 };
 

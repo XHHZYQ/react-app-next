@@ -2,7 +2,6 @@
 import { Input } from 'antd';
 
 const AInput = (props) => {
-  console.log(props);
   const { placeholder, onChange, allowClear = true, disabled = false } = props;
   return (
     <div>
