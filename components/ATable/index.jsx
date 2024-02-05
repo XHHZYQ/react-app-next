@@ -73,7 +73,6 @@ const setColumns = (columns, rowOperationList) => {
         );
       }
     };
-    console.log('actions', actions);
     columns[columns.length - 1] = actions;
   }
 };

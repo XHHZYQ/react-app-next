@@ -15,7 +15,7 @@ const formList = [
     label: '输入框',
     model: 'classId',
     placeholder: '请输入。。',
-    onChange: (e) => {
+    change: (e) => {
       console.log('输入框 change', e.target.value);
     },
     // disabled: true
@@ -25,7 +25,7 @@ const formList = [
     label: '选择框',
     model: 'lessonId',
     placeholder: '请选择。。',
-    onChange: (value) => {
+    change: (value) => {
       console.log(`selected ${value}`);
     },
     options: [
@@ -38,6 +38,28 @@ const formList = [
         "value": "6"
       }
     ]
+  },
+  {
+    inputType: 'rangePicker',
+    picker: '',
+    label: '日期',
+    model: 'startEndTime',
+    placeholder: ['开始日期', '结束日期'],
+    // disabled: true
+    // change: (date, dateString) => {
+    //   console.log('输入框 change', date, dateString);
+    // },
+    format: () => 'YYYY-MM-DD HH:mm:ss',
+    disabledDate: (currentDate) => {
+      const oneDay = 1000 * 60 * 60 * 24;
+      if (currentDate < Date.now() - oneDay * 2) {
+        return true;
+      } else if (currentDate > Date.now() + oneDay * 5) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 ];
 
@@ -85,6 +107,13 @@ const listApi = {
   resultKey: 'list',
   beforeSubmit: (params) => {
     params.lessonType = "1";
+    const { startEndTime } = params;
+    if (startEndTime?.length) {
+      params.startTime = startEndTime[0];
+      params.endTime = startEndTime[1];
+    }
+    delete params.startEndTime;
+
     return params;
   },
   // responseHandle: (list) => {
