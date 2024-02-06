@@ -1,8 +1,7 @@
 import { Button, Form } from 'antd';
 import { useState } from 'react';
-import { ASelect, AInput } from '../FormItem/index.js';
+import { ASelect, AInput, ADatePicker, ARangePicker } from '../FormItem';
 import { SearchOutlined } from '@ant-design/icons';
-
 
 const TableSearch = (props) => {
   const {
@@ -26,7 +25,6 @@ const TableSearch = (props) => {
   const onValuesChange = (changedValues, allValues) => {
     setValues(allValues);
   };
-  console.log('searchParams', searchParams);
   return (
     <div style={{ marginBottom: '20px' }}>
       <Form
@@ -48,6 +46,16 @@ const TableSearch = (props) => {
             // 选择框
             return (
               <ASelect key={index}  {...item} />
+            );
+          } else if (item.inputType === 'datePicker') {
+            // 日期选择
+            return (
+              <ADatePicker key={index}  {...item} />
+            );
+          } else if (item.inputType === 'rangePicker') {
+            // 日期范围选择
+            return (
+              <ARangePicker key={index}  {...item} />
             );
           }
         })}

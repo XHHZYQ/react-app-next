@@ -21,7 +21,7 @@ const formList = [
     label: '选择框',
     model: 'cityId',
     placeholder: '请选择。。',
-    onChange: (value) => {
+    change: (value) => {
       console.log(`selected ${value}`);
     },
     rules: [
