@@ -13,6 +13,10 @@ const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
 
+
+/**
+ * Form 组件
+ **/
 const AForm = (props) => {
   const {
     formList = [],

@@ -2,7 +2,7 @@ import ATable, { getTableList } from "../../components/ATable";
 import { getCourseWareList } from "../../api/index.js";
 
 const searchParams = {
-  lessonType: undefined,
+  lessonType: '1',
   classId: undefined,
   lessonId: undefined,
   startTime: undefined,
@@ -127,6 +127,7 @@ const MyTable = ({ tableData }) => {
   return (
     <div>
       <ATable
+        excludeResetKey={['lessonType']}
         searchParams={searchParams}
         formList={formList}
         tableData={tableData}

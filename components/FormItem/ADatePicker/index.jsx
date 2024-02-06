@@ -10,6 +10,9 @@ const handleDisabledDate = (disabledDate, currentDate) => {
   }
 };
 
+/**
+ * 日期选择 组件
+ **/
 const ADatePicker = ({ label, model, rules, placeholder, picker, change, allowClear, disabled, disabledDate }) => {
   // picker 可选择范围：date | week | month | quarter | year
   return (label || label === ' ') ?
