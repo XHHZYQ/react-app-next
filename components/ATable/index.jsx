@@ -10,6 +10,7 @@ export const getTableList = async (
 ) => {
   if (!initFetch) return;
   let values = { ...params };
+  console.log('getTableList params 。。', params);
   if (typeof beforeSubmit === 'function') {
     params = beforeSubmit(values);
   }
@@ -100,7 +101,6 @@ const ATable = ({
   // 设置表格数据
   const setTableList = async (values) => {
     const list = await getTableList(listApi, values);
-    console.log('list 。。2', list);
     setDataSource(list);
   };
 

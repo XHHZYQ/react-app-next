@@ -1,5 +1,5 @@
 import { Button, Form } from 'antd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ASelect, AInput, ADatePicker, ARangePicker } from '../FormItem';
 import { SearchOutlined } from '@ant-design/icons';
 
@@ -15,24 +15,48 @@ const TableSearch = (props) => {
     wrapperCol = { span: 16 }
   } = props;
 
-  const [values, setValues] = useState(searchParams);
+  const [form] = Form.useForm();
+  const [formModel, setFormModel] = useState(searchParams);
 
   // 查询方法
-  const handleSearch = async () => {
-    setTableList(values);
+  const handleSearch = () => {
+    setTableList(formModel);
+  };
+
+  // 重置查询
+  const resetSearch = () => {
+    form.setFieldsValue({
+      lessonType: undefined,
+      classId: undefined,
+      lessonId: undefined,
+      startEndTime: undefined
+    });
+    setFormModel((value) => {
+      const newValue = {
+        ...value,
+        lessonType: undefined,
+        classId: undefined,
+        lessonId: undefined,
+        startEndTime: undefined
+      };
+      setTableList(newValue);
+      return newValue;
+    });
+    console.log('formModel。。', formModel);
   };
 
   const onValuesChange = (changedValues, allValues) => {
-    setValues(allValues);
+    setFormModel(allValues);
   };
   return (
     <div style={{ marginBottom: '20px' }}>
       <Form
+        form={form}
         labelCol={labelCol}
         wrapperCol={wrapperCol}
         layout={layout}
         size={size}
-        initialValues={values}
+        initialValues={formModel}
         labelAlign={labelAlign}
         onValuesChange={onValuesChange}
       >
@@ -69,7 +93,7 @@ const TableSearch = (props) => {
           <Button onClick={handleSearch} type="primary" htmlType="submit" icon={<SearchOutlined />}>
             查询
           </Button>
-          <Button style={{ marginLeft: '10px' }}> 取消 </Button>
+          <Button onClick={resetSearch} style={{ marginLeft: '10px' }}> 重置 </Button>
         </Form.Item>
       </Form>
     </div>

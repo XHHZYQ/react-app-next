@@ -3,8 +3,8 @@ import { getCourseWareList } from "../../api/index.js";
 
 const searchParams = {
   lessonType: undefined,
-  classId: '492',
-  lessonId: '3',
+  classId: undefined,
+  lessonId: undefined,
   startTime: undefined,
   endTime: undefined,
 };
