@@ -2,7 +2,7 @@ import Axios from 'axios';
 
 const baseUrl = 'http://service-tdog.sjhh-test.com';
 
-export const getCourseWareList = (params) => Axios({
+export const TeachingList = (params) => Axios({
   url: `${baseUrl}/ai-class/teacher-teaching/list`,
   headers: {
     'Content-Type': 'application/json',
@@ -10,4 +10,15 @@ export const getCourseWareList = (params) => Axios({
   },
   method: "POST",
   data: params,
-});;
+});
+
+
+export const courseWareList = (params) => Axios({
+  url: 'http://service-tdog.sjhh-test.com/saas-admin/courseware/list',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'c3500fdedec0a3416be7f8fd2a397381'
+  },
+  method: "POST",
+  data: params,
+});
