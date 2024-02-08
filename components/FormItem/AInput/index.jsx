@@ -1,7 +1,9 @@
 
 import { Form, Input } from 'antd';
 
-
+/**
+ * 输入框 组件
+ **/
 const AInput = (props) => {
   const { label, model, rules, placeholder, change, allowClear = true, disabled = false } = props;
   return (

@@ -1,93 +1,98 @@
-
+import { useEffect } from 'react';
 import { Button, Form } from 'antd';
-import { ASelect, AInput } from '../FormItem/index.js';
+import { ASelect, AInput, ARangePicker } from '../FormItem/index.js';
 import styles from './AForm.module.scss';
 
-const onValuesChange = (changedValues, allValues) => {
-  console.log('onValuesChange:', changedValues, allValues);
-};
+// const onValuesChange = (changedValues, allValues) => {
+//   console.log('onValuesChange:', changedValues, allValues);
+// };
+// const onFinishFailed = (errorInfo) => {
+//   console.log('Failed:', errorInfo);
+// };
 const onFinish = (values) => {
   console.log('Success:', values);
 };
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
 
+/**
+ * Form 组件
+ **/
 const AForm = (props) => {
   const {
     formList = [],
     initialValues = {},
+    formModel = {},
     layout = 'horizontal',
     size = 'middle',
     disabled = false,
     labelAlign = 'right',
+    labelCol = { span: 8 },
+    wrapperCol = { span: 16 },
+    maxWidth = { maxWidth: 600 },
     submitBtnText = '确定',
-    cancelBtnText = '取消'
+    cancelBtnText = '重置'
   } = props;
 
-  console.log('initialValues', initialValues);
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue(formModel);
+    console.log('useEffect formModel', formModel);
+  });
+
+  // 重置表单
+  const resetSearch = () => {
+    form.resetFields();
+  };
+
   return (
     <div className={styles.formBox} style={{ marginBottom: '40px' }}>
-      {<Form
-        name="basic"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        style={{ maxWidth: 600 }}
-        layout={layout}
-        size={size}
-        initialValues={initialValues}
-        disabled={disabled}
-        labelAlign={labelAlign}
-        onValuesChange={onValuesChange}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
-      >
-        {
-          formList.map((item, index) => {
-            if (item.inputType === 'select') {
-              return (
-                <Form.Item
-                  key={index}
-                  label={item.label}
-                  name={item.model}
-                  rules={item.rules}
-                >
-                  <ASelect {...item} />
-                </Form.Item>
-              );
-            } else if (item.inputType === 'input') {
-              return (
-                <Form.Item
-                  key={index}
-                  label={item.label}
-                  name={item.model}
-                  rules={item.rules}
-                >
-                  <AInput {...item} />
-                </Form.Item>
-              );
-            }
-
-          })
-        }
-
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
+      {
+        // initialValues = { initialValues }
+        // onFinishFailed = { onFinishFailed }
+        // autoComplete = "off"
+        // onValuesChange = { onValuesChange }
+        <Form
+          form={form}
+          labelCol={labelCol}
+          wrapperCol={wrapperCol}
+          style={maxWidth}
+          layout={layout}
+          size={size}
+          disabled={disabled}
+          labelAlign={labelAlign}
+          onFinish={onFinish}
         >
-          <Button type="primary" htmlType="submit">
-            {submitBtnText}
-          </Button>
+          {formList.map((item, index) => {
+            if (item.inputType === 'input') {
+              // 输入框
+              return <AInput key={index} {...item} />;
+            } else if (item.inputType === 'select') {
+              // 选择框
+              return <ASelect key={index} {...item} />;
+            } else if (item.inputType === 'datePicker') {
+              // 日期选择
+              return <ADatePicker key={index} {...item} />;
+            } else if (item.inputType === 'rangePicker') {
+              // 日期范围选择
+              return <ARangePicker key={index} {...item} />;
+            }
+          })}
 
-          <Button style={{ marginLeft: '10px' }}>
-            {cancelBtnText}
-          </Button>
-
-        </Form.Item>
-      </Form>}
+          <Form.Item
+            wrapperCol={{
+              offset: labelCol.span,
+              span: wrapperCol.span
+            }}
+          >
+            <Button type="primary" htmlType="submit">
+              {submitBtnText}
+            </Button>
+            <Button onClick={resetSearch} style={{ marginLeft: '10px' }}>
+              {cancelBtnText}
+            </Button>
+          </Form.Item>
+        </Form>
+      }
     </div>
   );
 };

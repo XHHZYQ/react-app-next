@@ -3,8 +3,36 @@ import { useState, useEffect } from 'react';
 import { ASelect, AInput, ADatePicker, ARangePicker } from '../FormItem';
 import { SearchOutlined } from '@ant-design/icons';
 
+/**
+ * 清空搜索条件
+ * @param sourceData 重置对象
+ * @param excludeKey 不重置的字段
+ */
+const resetData = (sourceData, excludeKey = []) => {
+  const source = { ...sourceData };
+  if (source && Object.keys(source).length) {
+    let exclude = ['limit', 'page'];
+    excludeKey.length && (exclude = [...excludeKey, ...exclude]);
+    for (let key in source) {
+      if (exclude.every((el) => el !== key)) {
+        if (Array.isArray(source[key])) {
+          // 数组
+          source[key] = [];
+        } else if (typeof source[key] !== 'undefined') {
+          source[key] = undefined;
+        }
+      }
+    }
+  }
+  return source;
+};
+
+/**
+ * 搜索 组件
+ **/
 const TableSearch = (props) => {
   const {
+    excludeResetKey,
     formList = [],
     searchParams = {},
     setTableList,
@@ -19,30 +47,28 @@ const TableSearch = (props) => {
   const [formModel, setFormModel] = useState(searchParams);
 
   // 查询方法
-  const handleSearch = () => {
-    setTableList(formModel);
+  const handleSearch = (values) => {
+    const defaultValue = {};
+    excludeResetKey.forEach(item => defaultValue[item] = searchParams[item]);
+
+    setTableList({ ...values, ...defaultValue });
   };
 
   // 重置查询
   const resetSearch = () => {
-    form.setFieldsValue({
-      lessonType: undefined,
-      classId: undefined,
-      lessonId: undefined,
-      startEndTime: undefined
-    });
-    setFormModel((value) => {
-      const newValue = {
-        ...value,
-        lessonType: undefined,
-        classId: undefined,
-        lessonId: undefined,
-        startEndTime: undefined
-      };
-      setTableList(newValue);
-      return newValue;
-    });
-    console.log('formModel。。', formModel);
+    const data = resetData(formModel, excludeResetKey);
+    form.setFieldsValue(data); // 重置表单
+    // setFormModel((value) => {
+    //   const newValue = {
+    //     ...value,
+    //     ...data
+    //   };
+    //   setTableList(newValue);
+    //   return newValue;
+    // });
+    // const params = form.getFieldsValue(true); // 获取当前表单值
+    setTableList(data);
+    console.log('formModel。。', data);
   };
 
   const onValuesChange = (changedValues, allValues) => {
@@ -59,6 +85,7 @@ const TableSearch = (props) => {
         initialValues={formModel}
         labelAlign={labelAlign}
         onValuesChange={onValuesChange}
+        onFinish={handleSearch}
       >
         {formList.map((item, index) => {
           if (item.inputType === 'input') {
@@ -90,7 +117,7 @@ const TableSearch = (props) => {
             span: wrapperCol
           }}
         >
-          <Button onClick={handleSearch} type="primary" htmlType="submit" icon={<SearchOutlined />}>
+          <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>
             查询
           </Button>
           <Button onClick={resetSearch} style={{ marginLeft: '10px' }}> 重置 </Button>

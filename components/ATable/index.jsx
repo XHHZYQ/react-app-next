@@ -78,7 +78,12 @@ const setColumns = (columns, rowOperationList) => {
   }
 };
 
+
+/**
+ * table 组件
+ **/
 const ATable = ({
+  excludeResetKey = [],
   searchParams = {},
   formList = [],
   tableData = [],
@@ -106,7 +111,7 @@ const ATable = ({
 
   return (
     <div className={Style.ATableContainer}>
-      <TableSearch formList={formList} searchParams={searchParams} setTableList={setTableList} />
+      <TableSearch excludeResetKey={excludeResetKey} formList={formList} searchParams={searchParams} setTableList={setTableList} />
 
       <Table
         columns={columns}

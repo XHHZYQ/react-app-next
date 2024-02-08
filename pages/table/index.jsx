@@ -1,8 +1,8 @@
 import ATable, { getTableList } from "../../components/ATable";
-import { getCourseWareList } from "../../api/index.js";
+import { TeachingList } from "../../api/index.js";
 
 const searchParams = {
-  lessonType: undefined,
+  lessonType: '1',
   classId: undefined,
   lessonId: undefined,
   startTime: undefined,
@@ -102,7 +102,7 @@ const columns = [
   }
 ];
 const listApi = {
-  requestFun: getCourseWareList,
+  requestFun: TeachingList,
   initFetch: true,
   resultKey: 'list',
   beforeSubmit: (params) => {
@@ -127,6 +127,7 @@ const MyTable = ({ tableData }) => {
   return (
     <div>
       <ATable
+        excludeResetKey={['lessonType']}
         searchParams={searchParams}
         formList={formList}
         tableData={tableData}
