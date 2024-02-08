@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Button, Form } from 'antd';
-import { ASelect, AInput, ARangePicker } from '../FormItem/index.js';
+import { ASelect, AInput, ARangePicker, AInputNumber, ACheckboxGroup, ARadioGroup } from '../FormItem/index.js';
 import styles from './AForm.module.scss';
 
 // const onValuesChange = (changedValues, allValues) => {
@@ -75,6 +75,15 @@ const AForm = (props) => {
             } else if (item.inputType === 'rangePicker') {
               // 日期范围选择
               return <ARangePicker key={index} {...item} />;
+            } else if (item.inputType === 'inputNumber') {
+              // 数字输入框
+              return <AInputNumber key={index} {...item} />;
+            } else if (item.inputType === 'checkboxGroup') {
+              // 数字输入框
+              return <ACheckboxGroup key={index} {...item} />;
+            } else if (item.inputType === 'radioGroup') {
+              // 单选框组
+              return <ARadioGroup key={index} {...item} />;
             }
           })}
 

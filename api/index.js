@@ -2,6 +2,12 @@ import Axios from 'axios';
 
 const baseUrl = 'http://service-tdog.sjhh-test.com';
 
+const AdminBaseUrl = 'http://service-tdog.sjhh-test.com/saas-admin';
+const AdminHeaders = {
+  'Content-Type': 'application/json',
+  'Authorization': 'c3500fdedec0a3416be7f8fd2a397381'
+};
+
 export const TeachingList = (params) => Axios({
   url: `${baseUrl}/ai-class/teacher-teaching/list`,
   headers: {
@@ -13,12 +19,23 @@ export const TeachingList = (params) => Axios({
 });
 
 
-export const courseWareList = (params) => Axios({
-  url: 'http://service-tdog.sjhh-test.com/saas-admin/courseware/list',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'c3500fdedec0a3416be7f8fd2a397381'
-  },
+export const matchAdd = (params) => Axios({
+  url: AdminBaseUrl + '/match-index/create',
+  headers: AdminHeaders,
+  method: "POST",
+  data: params,
+});
+
+export const matchDetail = (params) => Axios({
+  url: AdminBaseUrl + '/match-index/detail',
+  headers: AdminHeaders,
+  method: "POST",
+  data: params,
+});
+
+export const matchEdit = (params) => Axios({
+  url: AdminBaseUrl + '/match-index/edit',
+  headers: AdminHeaders,
   method: "POST",
   data: params,
 });
