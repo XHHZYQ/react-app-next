@@ -10,7 +10,7 @@ const AInputNumber = (props) => {
     min,
     max,
     disabled,
-    onChange,
+    change,
     changeOnWheel = true,
     controls = true
   } = props;
@@ -23,7 +23,7 @@ const AInputNumber = (props) => {
           min={min}
           max={max}
           disabled={disabled}
-          onChange={onChange}
+          onChange={change}
           // changeOnWheel={changeOnWheel}
           controls={controls}
         />
@@ -33,7 +33,7 @@ const AInputNumber = (props) => {
         min={1}
         max={10}
         disabled={disabled}
-        onChange={onChange}
+        onChange={change}
         // changeOnWheel={changeOnWheel}
         controls={controls}
       />)

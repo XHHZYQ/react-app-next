@@ -5,11 +5,21 @@ import { useEffect, useState } from 'react';
 import { matchAdd, matchDetail, matchEdit } from 'api/index.js';
 
 const formModel = {
-  studentName: undefined,
-  sex: undefined,
-  number: undefined,
-  gradeId: undefined,
-  classId: undefined
+  name: '赛事名称',
+  domain: 'abc',
+  year: '2024',
+  intro: undefined,
+  enrollSwitch: undefined,
+  enrollTime: [],
+  startTime: undefined,
+  endTime: undefined,
+  startEndTime: undefined,
+  duration: 100,
+  warnNumber: undefined,
+  level: [1],
+  language: [3],
+  groupRule: 1,
+  closeBetaTest: undefined
 };
 
 
@@ -70,39 +80,39 @@ const formItems = {
     placeholder: '请输入赛事域名',
     rules: formRules.domain
   },
-  // closeBetaTest: {
-  //   label: '内部测试',
-  //   inputType: 'checkbox',
-  //   model: 'closeBetaTest',
-  //   options: { value: '此赛事仅供内部测试（勾选后仅能通过域名访问，列表中不可见）' },
-  // },
+  closeBetaTest: {
+    label: '内部测试',
+    inputType: 'checkbox',
+    model: 'closeBetaTest',
+    options: { label: '此赛事仅供内部测试（勾选后仅能通过域名访问，列表中不可见）' },
+  },
   year: {
     label: '年度信息',
     inputType: 'input',
     model: 'year',
     placeholder: '请输入年度信息',
   },
-  // intro: {
-  //   label: '赛事简介',
-  //   inputType: 'textarea',
-  //   model: 'intro',
-  //   placeholder: '请输入赛事简介',
-  //   rows: 4,
-  //   maxlength: 500,
-  //   showWordLimit: true,
-  // },
-  // enrollSwitch: {
-  //   label: '自主报名',
-  //   inputType: 'checkbox',
-  //   model: 'enrollSwitch',
-  //   options: { key: 1, value: '开启自主报名' },
-  //   change: (value) => {
-  //     this.formItems.enrollTime.isHidden = value !== 1;
-  //     if (value === 0) {
-  //       this.formModel.enrollTime = [];
-  //     }
-  //   },
-  // },
+  intro: {
+    label: '赛事简介',
+    inputType: 'textarea',
+    model: 'intro',
+    placeholder: '请输入赛事简介',
+    rows: 4,
+    maxlength: 500,
+    showWordLimit: true,
+  },
+  enrollSwitch: {
+    label: '自主报名',
+    inputType: 'checkbox',
+    model: 'enrollSwitch',
+    options: { label: '开启自主报名' },
+    change: (value) => {
+      this.formItems.enrollTime.isHidden = value !== 1;
+      if (value === 0) {
+        this.formModel.enrollTime = [];
+      }
+    },
+  },
   enrollTime: {
     label: '报名时间',
     inputType: 'rangePicker',
@@ -232,6 +242,7 @@ const MyForm = () => {
   return (
     <div className={styles.formBox} style={{ marginBottom: '20px' }}>
       <AForm
+        maxWidth={{ maxWidth: 670 }}
         formModel={formModel}
         initialValues={{}}
         formList={formList}

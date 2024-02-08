@@ -2,7 +2,7 @@
 import { Form, Checkbox } from 'antd';
 
 const ACheckboxGroup = (props) => {
-  const { label, model, rules, options, disabled, onChange } = props;
+  const { label, model, rules, options, disabled, change } = props;
 
   return (
     (label || label === ' ') ?
@@ -10,13 +10,13 @@ const ACheckboxGroup = (props) => {
         <Checkbox.Group
           options={options}
           disabled={disabled}
-          onChange={onChange}
+          onChange={change}
         />
       </Form.Item>) :
       (<Checkbox.Group
         options={options}
         disabled={disabled}
-        onChange={onChange}
+        onChange={change}
       />)
   );
 };

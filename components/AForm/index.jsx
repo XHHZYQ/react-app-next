@@ -1,14 +1,8 @@
 import { useEffect } from 'react';
 import { Button, Form } from 'antd';
-import { ASelect, AInput, ARangePicker, AInputNumber, ACheckboxGroup, ARadioGroup } from '../FormItem/index.js';
+import { ASelect, AInput, ATextarea, ARangePicker, AInputNumber, ACheckbox, ACheckboxGroup, ARadioGroup } from '../FormItem/index.js';
 import styles from './AForm.module.scss';
 
-// const onValuesChange = (changedValues, allValues) => {
-//   console.log('onValuesChange:', changedValues, allValues);
-// };
-// const onFinishFailed = (errorInfo) => {
-//   console.log('Failed:', errorInfo);
-// };
 const onFinish = (values) => {
   console.log('Success:', values);
 };
@@ -18,9 +12,12 @@ const onFinish = (values) => {
  **/
 const AForm = (props) => {
   const {
-    formList = [],
     initialValues = {},
     formModel = {},
+    formList = [],
+    addParam,
+    editParam,
+    detailParam,
     layout = 'horizontal',
     size = 'middle',
     disabled = false,
@@ -37,6 +34,10 @@ const AForm = (props) => {
   useEffect(() => {
     form.setFieldsValue(formModel);
     console.log('useEffect formModel', formModel);
+
+    // detailParam();
+
+
   });
 
   // 重置表单
@@ -48,9 +49,6 @@ const AForm = (props) => {
     <div className={styles.formBox} style={{ marginBottom: '40px' }}>
       {
         // initialValues = { initialValues }
-        // onFinishFailed = { onFinishFailed }
-        // autoComplete = "off"
-        // onValuesChange = { onValuesChange }
         <Form
           form={form}
           labelCol={labelCol}
@@ -78,12 +76,18 @@ const AForm = (props) => {
             } else if (item.inputType === 'inputNumber') {
               // 数字输入框
               return <AInputNumber key={index} {...item} />;
+            } else if (item.inputType === 'checkbox') {
+              // 单选框组
+              return <ACheckbox key={index} {...item} />;
             } else if (item.inputType === 'checkboxGroup') {
               // 数字输入框
               return <ACheckboxGroup key={index} {...item} />;
             } else if (item.inputType === 'radioGroup') {
               // 单选框组
               return <ARadioGroup key={index} {...item} />;
+            } else if (item.inputType === 'textarea') {
+              // 单选框组
+              return <ATextarea key={index} {...item} />;
             }
           })}
 
