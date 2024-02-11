@@ -3,22 +3,24 @@ import AForm from '../../components/AForm/index.jsx';
 import styles from './form.module.scss';
 import { useEffect, useState } from 'react';
 import { matchAdd, matchDetail, matchEdit } from 'api/index.js';
+import dayjs from 'dayjs';
+console.log('dayjs。。', dayjs);
 
 const formModel = {
-  name: '赛事名称',
-  domain: 'abc',
-  year: '2024',
+  name: undefined,
+  domain: undefined,
+  year: undefined,
   intro: undefined,
   enrollSwitch: undefined,
   enrollTime: [],
   startTime: undefined,
   endTime: undefined,
   startEndTime: undefined,
-  duration: 100,
+  duration: undefined,
   warnNumber: undefined,
-  level: [1],
-  language: [3],
-  groupRule: 1,
+  level: [],
+  language: [],
+  groupRule: undefined,
   closeBetaTest: undefined
 };
 
@@ -34,9 +36,9 @@ const formRules = {
     { required: true, message: '请选择比赛时间' },
     {
       validator: (rule, value, callback) => {
-        if (value && this.formModel.enrollTime?.length) {
+        if (value && formModel.enrollTime?.length) {
           const start = new Date(value).getTime();
-          const enroll = new Date(this.formModel.enrollTime[1])?.getTime();
+          const enroll = new Date(formModel.enrollTime[1])?.getTime();
           console.log('start >= enroll', start >= enroll);
           if (start <= enroll) {
             callback(new Error('比赛时间不能小于报名截止时间'));
@@ -46,7 +48,7 @@ const formRules = {
         } else if (value?.length) {
           const time =
             new Date(value[1]).getTime() - new Date(value[0]).getTime() <
-            this.formModel.duration * 60 * 1000;
+            formModel.duration * 60 * 1000;
           if (time) {
             callback(new Error('比赛时间范围必须大于等于答题时长'));
           } else {
@@ -107,9 +109,9 @@ const formItems = {
     model: 'enrollSwitch',
     options: { label: '开启自主报名' },
     change: (value) => {
-      this.formItems.enrollTime.isHidden = value !== 1;
+      formItems.enrollTime.isHidden = value !== 1;
       if (value === 0) {
-        this.formModel.enrollTime = [];
+        formModel.enrollTime = [];
       }
     },
   },
@@ -120,7 +122,7 @@ const formItems = {
     placeholder: ['开始时间', '结束时间'],
     isHidden: true, // TODO
     change: () => {
-      this.formModel.startEndTime = undefined;
+      formModel.startEndTime = undefined;
     },
     rules: formRules.enrollTime
   },
@@ -132,8 +134,8 @@ const formItems = {
     valueFormat: 'YYYY-MM-DD HH:mm',
     format: 'YYYY-MM-DD HH:mm',
     disabledDate: (time) => {
-      if (this.formModel.enrollTime?.length) {
-        const endTime = new Date(this.formModel.enrollTime[1]).getTime();
+      if (formModel.enrollTime?.length) {
+        const endTime = new Date(formModel.enrollTime[1]).getTime();
         return time.getTime() < endTime - 1000 * 60 * 60 * 24; // 小于于报名结束时间为禁用
       } else {
         return false;
@@ -162,8 +164,8 @@ const formItems = {
     inputType: 'checkboxGroup',
     model: 'level',
     change: (value) => {
-      if (value?.length && this.formModel.language?.length) {
-        this.generateGroupRule(value, this.formModel.language);
+      if (value?.length && formModel.language?.length) {
+        generateGroupRule(value, formModel.language);
       }
     },
     rules: formRules.level,
@@ -180,8 +182,8 @@ const formItems = {
     inputType: 'checkboxGroup',
     model: 'language',
     change: (value) => {
-      if (value?.length && this.formModel.level?.length) {
-        this.generateGroupRule(this.formModel.level, value);
+      if (value?.length && formModel.level?.length) {
+        generateGroupRule(formModel.level, value);
       }
     },
     rules: formRules.language,
@@ -197,8 +199,8 @@ const formItems = {
     inputType: 'radioGroup',
     model: 'groupRule',
     change: () => {
-      if (this.formModel.language?.length && this.formModel.level?.length) {
-        this.generateGroupRule(this.formModel.level, this.formModel.language);
+      if (formModel.language?.length && formModel.level?.length) {
+        generateGroupRule(formModel.level, formModel.language);
       }
     },
     rules: formRules.groupRule,
@@ -221,15 +223,27 @@ const addParam = {
 };
 const editParam = {
   requestFun: matchEdit,
-  params: {},
+  params: { id: 255 },
   beforeHandle: null,
   resultHandle: null
 };
 const detailParam = {
   requestFun: matchDetail,
-  params: { id: '' },
+  params: { id: 255, act: 'info' },
   initFetch: true,
   resultHandle: (data) => {
+    if (data.enrollStartTimeText && data.enrollEndTimeText) {
+      data.enrollTime = [
+        dayjs(data.enrollStartTime * 1000),
+        dayjs(data.enrollEndTime * 1000)
+      ];
+    }
+    if (data.startTime && data.endTime) {
+      data.startEndTime = [
+        dayjs(data.startTime * 1000),
+        dayjs(data.endTime * 1000)
+      ];
+    }
     return data;
   }
 };

@@ -6,7 +6,7 @@ const handleDisabledDate = (disabledDate, currentDate) => {
   if (typeof disabledDate === 'function') {
     return disabledDate(currentDate);
   } else {
-    return true;
+    return false;
   }
 };
 

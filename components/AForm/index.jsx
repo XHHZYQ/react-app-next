@@ -1,6 +1,15 @@
 import { useEffect } from 'react';
 import { Button, Form } from 'antd';
-import { ASelect, AInput, ATextarea, ARangePicker, AInputNumber, ACheckbox, ACheckboxGroup, ARadioGroup } from '../FormItem/index.js';
+import {
+  ASelect,
+  AInput,
+  ATextarea,
+  ARangePicker,
+  AInputNumber,
+  ACheckbox,
+  ACheckboxGroup,
+  ARadioGroup
+} from '../FormItem/index.js';
 import styles from './AForm.module.scss';
 
 const onFinish = (values) => {
@@ -34,11 +43,100 @@ const AForm = (props) => {
   useEffect(() => {
     form.setFieldsValue(formModel);
     console.log('useEffect formModel', formModel);
-
-    // detailParam();
-
-
+    // getDetail(); // TODO 路由跳转添加 id 值，获取详情
   });
+
+  const getDetail = () => {
+    const { requestFun, params, resultKey, resultHandle, afterHandle } = detailParam;
+
+    requestFun(params).then(({ data: { content = {} } }) => {
+      console.log('getDetail 11。', content);
+      let resValue = {};
+      if (typeof resultHandle === 'function') {
+        // 父组件有处理方法，但没有返回值，说明父组件处理了data，不需要再处理
+        const res = resultHandle(content);
+        if (res) {
+          resValue = res;
+        } else {
+          return;
+        }
+      }
+
+      let values = {};
+      // 外部处理函数返回的值合并data的值
+      if (resultKey) {
+        values = { ...content[resultKey], ...resValue };
+      } else {
+        values = { ...content, ...resValue };
+      }
+
+      console.log('getDetail 22', values);
+      const formData = {};
+      for (let item in values) {
+        if (formModel.hasOwnProperty(item) && values[item] !== null) {
+          formData[item] = values[item];
+        }
+      }
+      form.setFieldsValue(formData);
+      console.log('getDetail。。 33', formData);
+
+      if (typeof afterHandle === 'function') {
+        afterHandle(content);
+      }
+    });
+  };
+
+  // 提交表单
+  const submitForm = (values) => {
+    addParam.requestFun(values);
+
+    if (
+      (actionType.value === 'add' && !addParam.requestFun) ||
+      (actionType.value === 'edit' && !editParam.requestFun)
+    ) {
+      $message.error('请求url不能为空');
+      return;
+    }
+    let values = { ...formModel };
+
+    formList.forEach((el) => {
+      // 日期格式转换
+      let isDate = ['date', 'datetime', 'datetimerange', 'daterange'].some(
+        (item) => item === el.inputType
+      );
+      let model = values[el.model];
+      if (isDate && typeof model !== undefined) {
+        if (Array.isArray(model)) {
+          model = model.map((item) => new Date(item).getTime() / 1000); // 时间戳转为秒（后端约定）
+          values[el.model] = model;
+        } else {
+          model = new Date(model).getTime() / 1000;
+          values[el.model] = model;
+        }
+      }
+    });
+
+    /** 兼容不要删除 */
+    if (addParam.beforeHandle || editParam.beforeHandle) {
+      // 新增、编辑前处理
+      let resultValue;
+      if (addParam.beforeHandle) {
+        resultValue = addParam.beforeHandle(values);
+      } else if (editParam.beforeHandle) {
+        resultValue = editParam.beforeHandle(values);
+      }
+      if (!resultValue) {
+        return;
+      } else {
+        values = resultValue;
+      }
+    }
+    /** 兼容不要删除 */
+
+    // values = boolToNum(values);
+    // ObjAttrArrToStr(values);
+    actionType.value === 'edit' ? editForm(values) : addForm(values);
+  };
 
   // 重置表单
   const resetSearch = () => {
@@ -58,7 +156,7 @@ const AForm = (props) => {
           size={size}
           disabled={disabled}
           labelAlign={labelAlign}
-          onFinish={onFinish}
+          onFinish={(values) => submitForm(values)}
         >
           {formList.map((item, index) => {
             if (item.inputType === 'input') {

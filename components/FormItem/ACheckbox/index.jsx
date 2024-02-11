@@ -6,15 +6,13 @@ const ACheckbox = (props) => {
 
   return (
     (label || label === ' ') ?
-      (<Form.Item label={label} name={model} rules={rules}>
+      (<Form.Item label={label} name={model} rules={rules} valuePropName={checked}>
         <Checkbox
-          valuepropname={checked}
           disabled={disabled}
           onChange={change}
         >{options.label}</Checkbox>
       </Form.Item>) :
       (<Checkbox
-        valuepropname={checked}
         disabled={disabled}
         onChange={change}
       >{options.label}</Checkbox>)
