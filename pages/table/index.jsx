@@ -77,9 +77,13 @@ const rowOperationList = [
     label: '课堂口令',
     handle: (row) => {
       console.log('点击课堂口令');
-    },
-    // type: 'link'
-    // disabled: () => false,
+    }
+  },
+  {
+    label: '编辑赛事',
+    href: (row) => `/form${row.id}`
+    // handle: (row) => {
+    // }
   }
 ];
 

@@ -54,6 +54,10 @@ const showHandle = (record, item) => {
   }
 };
 
+const handleHref = (item) => {
+  return typeof item.href === 'function' ? item.href() : item.href;
+};
+
 const setColumns = (columns, rowOperationList) => {
   if (rowOperationList.length) {
     const actions = {
@@ -66,7 +70,9 @@ const setColumns = (columns, rowOperationList) => {
               className={index > 0 ? Style.antBtnSpace : null }
               onClick={() => item.handle(record, item)}
               disabled={disabledHandle(record, item)}
-              type={ item.type || 'link' }
+              type={item.type || 'link'}
+              href={handleHref(item)}
+              target={item.target || '_blank'}
             >
               {item.label}
             </Button>

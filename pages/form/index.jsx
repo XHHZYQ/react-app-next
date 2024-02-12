@@ -6,6 +6,8 @@ import { matchAdd, matchDetail, matchEdit } from 'api/index.js';
 import dayjs from 'dayjs';
 console.log('dayjs。。', dayjs);
 
+let actionType = { value: 'add' };
+
 const formModel = {
   name: undefined,
   domain: undefined,
@@ -217,13 +219,13 @@ const formList = arr;
 
 const addParam = {
   requestFun: matchAdd,
-  params: {},
+  params: { act: 'info' },
   beforeHandle: null,
   resultHandle: null
 };
 const editParam = {
   requestFun: matchEdit,
-  params: { id: 255 },
+  params: { id: 255, act: 'info' },
   beforeHandle: null,
   resultHandle: null
 };
@@ -257,6 +259,7 @@ const MyForm = () => {
     <div className={styles.formBox} style={{ marginBottom: '20px' }}>
       <AForm
         maxWidth={{ maxWidth: 670 }}
+        actionType={actionType}
         formModel={formModel}
         initialValues={{}}
         formList={formList}
