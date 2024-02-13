@@ -48,17 +48,17 @@ const AForm = (props) => {
 
   useEffect(() => {
     form.setFieldsValue(formModel);
-    console.log('useEffect formModel', queryId);
-    if (queryId) {
-      getDetail(); // TODO 路由跳转添加 id 值，获取详情
-    }   
+    console.log('AForm useEffect queryId', queryId);
+    if (queryId && detailParam.initFetch) {
+      getDetail();
+    }
   });
 
   const getDetail = () => {
     const { requestFun, params, resultKey, resultHandle, afterHandle } = detailParam;
+    console.log('getDetail params', params);
 
     requestFun(params).then(({ data: { content = {} } }) => {
-      console.log('getDetail 11。', content);
       let resValue = {};
       if (typeof resultHandle === 'function') {
         // 父组件有处理方法，但没有返回值，说明父组件处理了data，不需要再处理
@@ -78,7 +78,6 @@ const AForm = (props) => {
         values = { ...content, ...resValue };
       }
 
-      console.log('getDetail 22', values);
       const formData = {};
       for (let item in values) {
         if (formModel.hasOwnProperty(item) && values[item] !== null) {
@@ -86,8 +85,8 @@ const AForm = (props) => {
         }
       }
       form.setFieldsValue(formData);
-      console.log('getDetail。。 33', formData);
 
+      actionType.value = 'edit';
       if (typeof afterHandle === 'function') {
         afterHandle(content);
       }

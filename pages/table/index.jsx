@@ -81,7 +81,10 @@ const rowOperationList = [
   },
   {
     label: '编辑赛事',
-    href: (row) => `/form${row.id}`
+    href: (row) => {
+      console.log('编辑赛事 row', row);
+      return `/form?id=${255}`;
+    }
     // handle: (row) => {
     // }
   }

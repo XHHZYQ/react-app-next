@@ -54,8 +54,8 @@ const showHandle = (record, item) => {
   }
 };
 
-const handleHref = (item) => {
-  return typeof item.href === 'function' ? item.href() : item.href;
+const handleHref = (record, item) => {
+  return typeof item.href === 'function' ? item.href(record, item) : item.href;
 };
 
 const setColumns = (columns, rowOperationList) => {
@@ -68,11 +68,11 @@ const setColumns = (columns, rowOperationList) => {
             <Button
               key={index}
               className={index > 0 ? Style.antBtnSpace : null }
-              onClick={() => item.handle(record, item)}
+              onClick={() => typeof item.handle === 'function' && item.handle(record, item)}
               disabled={disabledHandle(record, item)}
               type={item.type || 'link'}
-              href={handleHref(item)}
-              target={item.target || '_blank'}
+              href={handleHref(record, item)}
+              target={item.target || '_self'}
             >
               {item.label}
             </Button>

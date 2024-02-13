@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import AForm from '../../components/AForm/index.jsx';
 import styles from './form.module.scss';
 import { useEffect, useState } from 'react';
@@ -25,7 +26,6 @@ const formModel = {
   groupRule: undefined,
   closeBetaTest: undefined
 };
-
 
 const formRules = {
   name: [{ required: true, message: '请输入赛事名称' }],
@@ -88,13 +88,13 @@ const formItems = {
     label: '内部测试',
     inputType: 'checkbox',
     model: 'closeBetaTest',
-    options: { label: '此赛事仅供内部测试（勾选后仅能通过域名访问，列表中不可见）' },
+    options: { label: '此赛事仅供内部测试（勾选后仅能通过域名访问，列表中不可见）' }
   },
   year: {
     label: '年度信息',
     inputType: 'input',
     model: 'year',
-    placeholder: '请输入年度信息',
+    placeholder: '请输入年度信息'
   },
   intro: {
     label: '赛事简介',
@@ -103,7 +103,7 @@ const formItems = {
     placeholder: '请输入赛事简介',
     rows: 4,
     maxlength: 500,
-    showWordLimit: true,
+    showWordLimit: true
   },
   enrollSwitch: {
     label: '自主报名',
@@ -115,7 +115,7 @@ const formItems = {
       if (value === 0) {
         formModel.enrollTime = [];
       }
-    },
+    }
   },
   enrollTime: {
     label: '报名时间',
@@ -172,11 +172,11 @@ const formItems = {
     },
     rules: formRules.level,
     options: [
-      { value: 1, label: "学前" },
-      { value: 2, label: "小学" },
-      { value: 3, label: "初中" },
-      { value: 4, label: "高中" },
-      { value: 5, label: "职高" }
+      { value: 1, label: '学前' },
+      { value: 2, label: '小学' },
+      { value: 3, label: '初中' },
+      { value: 4, label: '高中' },
+      { value: 5, label: '职高' }
     ]
   },
   language: {
@@ -190,10 +190,10 @@ const formItems = {
     },
     rules: formRules.language,
     options: [
-      { value: 1, label: "图形化" },
-      { value: 2, label: "Python" },
-      { value: 3, label: "C语言" },
-      { value: 15, label: "不区分语言" }
+      { value: 1, label: '图形化' },
+      { value: 2, label: 'Python' },
+      { value: 3, label: 'C语言' },
+      { value: 15, label: '不区分语言' }
     ]
   },
   groupRule: {
@@ -207,8 +207,8 @@ const formItems = {
     },
     rules: formRules.groupRule,
     options: [
-      { value: 1, label: "学段-语言" },
-      { value: 2, label: "语言-学段" }
+      { value: 1, label: '学段-语言' },
+      { value: 2, label: '语言-学段' }
     ]
   }
 };
@@ -217,43 +217,45 @@ const arr = Object.values(formItems);
 arr.sort((a, b) => a.index - b.index);
 const formList = arr;
 
-const addParam = {
-  requestFun: matchAdd,
-  params: { act: 'info' },
-  beforeHandle: null,
-  resultHandle: null
-};
-const editParam = {
-  requestFun: matchEdit,
-  params: { id: 255, act: 'info' },
-  beforeHandle: null,
-  resultHandle: null
-};
-const detailParam = {
-  requestFun: matchDetail,
-  params: { id: 255, act: 'info' },
-  initFetch: true,
-  resultHandle: (data) => {
-    if (data.enrollStartTimeText && data.enrollEndTimeText) {
-      data.enrollTime = [
-        dayjs(data.enrollStartTime * 1000),
-        dayjs(data.enrollEndTime * 1000)
-      ];
-    }
-    if (data.startTime && data.endTime) {
-      data.startEndTime = [
-        dayjs(data.startTime * 1000),
-        dayjs(data.endTime * 1000)
-      ];
-    }
-    return data;
-  }
-};
-
 const MyForm = () => {
-  // const [formList, setFormList] = useState([]);
-  // useEffect(() => {
-  // });
+  const router = useRouter();
+  const {
+    query: { id }
+  } = router;
+  const queryId = id;
+
+  const addParam = {
+    requestFun: matchAdd,
+    params: { act: 'info' },
+    beforeHandle: null,
+    resultHandle: null
+  };
+
+  const detailParam = {
+    requestFun: matchDetail,
+    params: { id: queryId, act: 'info' },
+    initFetch: true,
+    resultHandle: (data) => {
+      if (data.enrollStartTimeText && data.enrollEndTimeText) {
+        data.enrollTime = [dayjs(data.enrollStartTime * 1000), dayjs(data.enrollEndTime * 1000)];
+      }
+      if (data.startTime && data.endTime) {
+        data.startEndTime = [dayjs(data.startTime * 1000), dayjs(data.endTime * 1000)];
+      }
+      return data;
+    }
+  };
+
+  const editParam = {
+    requestFun: matchEdit,
+    params: { id: queryId, act: 'info' },
+    beforeHandle: null,
+    resultHandle: null
+  };
+
+  useEffect(() => {
+    console.log('form use effect', queryId);
+  });
 
   return (
     <div className={styles.formBox} style={{ marginBottom: '20px' }}>
