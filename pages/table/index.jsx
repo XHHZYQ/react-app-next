@@ -96,7 +96,7 @@ const columns = [
     slot: 'matchName',
     minWidth: '180px',
     align: 'left',
-    tooltip: true,
+    ellipsis: true,
   },
   {
     title: '年度信息',
@@ -104,7 +104,7 @@ const columns = [
     slot: '',
     width: '90px',
     align: 'left',
-    tooltip: true
+    ellipsis: true
   },
   {
     title: '学段',
@@ -112,7 +112,7 @@ const columns = [
     slot: '',
     minWidth: '190px',
     align: 'left',
-    tooltip: true
+    ellipsis: true
   },
   {
     title: '语言',
@@ -120,7 +120,7 @@ const columns = [
     slot: '',
     minWidth: '160px',
     align: 'left',
-    tooltip: true
+    ellipsis: true
   },
   {
     title: '比赛时间范围',
@@ -128,7 +128,7 @@ const columns = [
     slot: '',
     width: '330px',
     align: 'left',
-    tooltip: true,
+    ellipsis: true,
     formatter: row => `${row.startTimeText} - ${row.endTimeText}`
   },
   {
@@ -137,7 +137,7 @@ const columns = [
     slot: '',
     width: '110px',
     align: 'left',
-    tooltip: true
+    ellipsis: true
   },
   {
     title: '状态',
@@ -145,20 +145,12 @@ const columns = [
     slot: '',
     minWidth: '110px',
     align: 'left',
-    tooltip: true,
+    ellipsis: true,
     formatter: (row, column, cellValue) => {
       return cellValue;
     }
   },
-  { title: '操作', slot: 'action', width: '255px', align: 'left' },
-  {
-    title: '附加操作',
-    slot: 'addition',
-    width: '210px',
-    align: 'left',
-    tooltip: true,
-    bind: { fixed: 'right' }
-  }
+  { title: '操作', slot: 'action', width: '255px', align: 'left', fixed: 'right' }
 ];
 const listApi = {
   requestFun: matchList,
