@@ -1,5 +1,5 @@
 import ATable, { getTableList } from "../../components/ATable";
-import { TeachingList } from "../../api/index.js";
+import { matchList } from "../../api/index.js";
 
 const searchParams = {
   lessonType: '1',
@@ -82,7 +82,6 @@ const rowOperationList = [
   {
     label: '编辑赛事',
     href: (row) => {
-      console.log('编辑赛事 row', row);
       return `/form?id=${255}`;
     }
     // handle: (row) => {
@@ -92,24 +91,77 @@ const rowOperationList = [
 
 const columns = [
   {
-    title: "班级",
-    dataIndex: "className",
+    title: '赛事名称',
+    dataIndex: 'name',
+    slot: 'matchName',
+    minWidth: '180px',
+    align: 'left',
+    tooltip: true,
   },
   {
-    title: "学生数量",
-    dataIndex: "studentCount",
+    title: '年度信息',
+    dataIndex: 'year',
+    slot: '',
+    width: '90px',
+    align: 'left',
+    tooltip: true
   },
   {
-    title: "课程",
-    dataIndex: "lessonName",
+    title: '学段',
+    dataIndex: 'levelText',
+    slot: '',
+    minWidth: '190px',
+    align: 'left',
+    tooltip: true
   },
   {
-    title: "操作",
-    dataIndex: "action"
+    title: '语言',
+    dataIndex: 'languageText',
+    slot: '',
+    minWidth: '160px',
+    align: 'left',
+    tooltip: true
+  },
+  {
+    title: '比赛时间范围',
+    dataIndex: 'startTimeText',
+    slot: '',
+    width: '330px',
+    align: 'left',
+    tooltip: true,
+    formatter: row => `${row.startTimeText} - ${row.endTimeText}`
+  },
+  {
+    title: '答题时间(分)',
+    dataIndex: 'duration',
+    slot: '',
+    width: '110px',
+    align: 'left',
+    tooltip: true
+  },
+  {
+    title: '状态',
+    dataIndex: 'statusText',
+    slot: '',
+    minWidth: '110px',
+    align: 'left',
+    tooltip: true,
+    formatter: (row, column, cellValue) => {
+      return cellValue;
+    }
+  },
+  { title: '操作', slot: 'action', width: '255px', align: 'left' },
+  {
+    title: '附加操作',
+    slot: 'addition',
+    width: '210px',
+    align: 'left',
+    tooltip: true,
+    bind: { fixed: 'right' }
   }
 ];
 const listApi = {
-  requestFun: TeachingList,
+  requestFun: matchList,
   initFetch: true,
   resultKey: 'list',
   beforeSubmit: (params) => {
@@ -130,7 +182,7 @@ const listApi = {
   },
 };
 
-const MyTable = ({ tableData }) => {
+const MyTable = ({ tableData = [] }) => {
   return (
     <div>
       <ATable
@@ -148,10 +200,10 @@ const MyTable = ({ tableData }) => {
 
 export default MyTable;
 
-export const getStaticProps = async () => {
-  const tableData = await getTableList(listApi, searchParams);
+// export const getStaticProps = async () => {
+//   const tableData = await getTableList(listApi, searchParams);
 
-  return {
-    props: { tableData },
-  };
-};
+//   return {
+//     props: { tableData },
+//   };
+// };

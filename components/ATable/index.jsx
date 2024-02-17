@@ -10,7 +10,6 @@ export const getTableList = async (
 ) => {
   if (!initFetch) return;
   let values = { ...params };
-  console.log('getTableList params 。。', params);
   if (typeof beforeSubmit === 'function') {
     params = beforeSubmit(values);
   }
@@ -25,7 +24,7 @@ export const getTableList = async (
     list = responseHandle(list);
   }
 
-  list = list.map((item) => ({ ...item, key: item.classLessonId }));
+  list = list.map((item) => ({ ...item, key: item.id }));
 
   if (typeof afterHandle === 'function') {
     afterHandle(content);
@@ -54,11 +53,13 @@ const showHandle = (record, item) => {
   }
 };
 
+// 处理按钮 href 属性
 const handleHref = (record, item) => {
   return typeof item.href === 'function' ? item.href(record, item) : item.href;
 };
 
-const setColumns = (columns, rowOperationList) => {
+// 添加操作列
+const pushOperationItem = (columns, rowOperationList) => {
   if (rowOperationList.length) {
     const actions = {
       title: '操作',
@@ -88,30 +89,31 @@ const setColumns = (columns, rowOperationList) => {
 /**
  * table 组件
  **/
-const ATable = ({
-  excludeResetKey = [],
-  searchParams = {},
-  formList = [],
-  tableData = [],
-  columns,
-  rowOperationList = [],
-  bordered = false,
-  listApi,
-  pagination = { position: 'bottomCenter' }
-}) => {
-  const [loading, setLoading] = useState(true);
+const ATable = (props) => {
+  const {
+    excludeResetKey = [],
+      searchParams = {},
+      formList = [],
+      tableData = [],
+      columns,
+      rowOperationList = [],
+      bordered = false,
+      listApi,
+      pagination = { position: 'bottomCenter' }
+  } = props;
+  const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState(tableData);
 
-  useEffect(() => {
-    setLoading(false);
-    return () => {};
-  }, [dataSource]);
-
-  setColumns(columns, rowOperationList);
+  useEffect(() => { // 表格列设置(挂载时只执行一次)
+    pushOperationItem(columns, rowOperationList);
+    setTableList();
+  }, []);
 
   // 设置表格数据
-  const setTableList = async (values) => {
+  const setTableList = async (values = {}) => {
+    setLoading(true);
     const list = await getTableList(listApi, values);
+    setLoading(false);
     setDataSource(list);
   };
 

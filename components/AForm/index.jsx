@@ -13,10 +13,6 @@ import {
 } from '../FormItem/index.js';
 import styles from './AForm.module.scss';
 
-const onFinish = (values) => {
-  console.log('Success:', values);
-};
-
 /**
  * Form 组件
  **/
@@ -47,16 +43,19 @@ const AForm = (props) => {
   const queryId = id;
 
   useEffect(() => {
+    console.log('子组件 effect 1');
     form.setFieldsValue(formModel);
-    console.log('AForm useEffect queryId', queryId);
+  }, []);
+
+  useEffect(() => {
+    console.log('子组件 effect 2 queryId', queryId);
     if (queryId && detailParam.initFetch) {
       getDetail();
     }
-  });
+  }, [editParam, detailParam]); // 第二参数为空数组，只有在组件挂载时执行一次
 
   const getDetail = () => {
     const { requestFun, params, resultKey, resultHandle, afterHandle } = detailParam;
-    console.log('getDetail params', params);
 
     requestFun(params).then(({ data: { content = {} } }) => {
       let resValue = {};

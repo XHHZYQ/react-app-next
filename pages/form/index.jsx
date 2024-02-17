@@ -1,16 +1,14 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import AForm from '../../components/AForm/index.jsx';
 import styles from './form.module.scss';
 import { useEffect, useState } from 'react';
 import { matchAdd, matchDetail, matchEdit } from 'api/index.js';
 import dayjs from 'dayjs';
-console.log('dayjs。。', dayjs);
 
 let actionType = { value: 'add' };
 
 const formModel = {
-  name: undefined,
+  name: '测试一下',
   domain: undefined,
   year: undefined,
   intro: undefined,
@@ -41,7 +39,6 @@ const formRules = {
         if (value && formModel.enrollTime?.length) {
           const start = new Date(value).getTime();
           const enroll = new Date(formModel.enrollTime[1])?.getTime();
-          console.log('start >= enroll', start >= enroll);
           if (start <= enroll) {
             callback(new Error('比赛时间不能小于报名截止时间'));
           } else {
@@ -252,10 +249,11 @@ const MyForm = () => {
     beforeHandle: null,
     resultHandle: null
   };
+  console.log('父组件。。');
 
   useEffect(() => {
-    console.log('form use effect', queryId);
-  });
+    console.log('父组件 effect', queryId);
+  }, []);
 
   return (
     <div className={styles.formBox} style={{ marginBottom: '20px' }}>
