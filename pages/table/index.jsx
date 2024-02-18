@@ -1,3 +1,4 @@
+import { Button } from 'antd';
 import ATable, { getTableList } from "../../components/ATable";
 import { matchList } from "../../api/index.js";
 
@@ -93,15 +94,16 @@ const columns = [
   {
     title: '赛事名称',
     dataIndex: 'name',
-    slot: 'matchName',
-    minWidth: '180px',
+    width: '180px',
     align: 'left',
     ellipsis: true,
+    render: (text, record, index) => (
+      <Button type="link" href={record.domain} target="_blank">{text}</Button>
+    )
   },
   {
     title: '年度信息',
     dataIndex: 'year',
-    slot: '',
     width: '90px',
     align: 'left',
     ellipsis: true
@@ -109,48 +111,39 @@ const columns = [
   {
     title: '学段',
     dataIndex: 'levelText',
-    slot: '',
-    minWidth: '190px',
+    width: '190px',
     align: 'left',
     ellipsis: true
   },
   {
     title: '语言',
     dataIndex: 'languageText',
-    slot: '',
-    minWidth: '160px',
+    width: '160px',
     align: 'left',
     ellipsis: true
   },
   {
     title: '比赛时间范围',
     dataIndex: 'startTimeText',
-    slot: '',
     width: '330px',
     align: 'left',
     ellipsis: true,
-    formatter: row => `${row.startTimeText} - ${row.endTimeText}`
+    formatter: (text, record) => `${record.startTimeText} - ${record.endTimeText}`
   },
   {
     title: '答题时间(分)',
     dataIndex: 'duration',
-    slot: '',
-    width: '110px',
+    width: '150px',
     align: 'left',
     ellipsis: true
   },
   {
     title: '状态',
     dataIndex: 'statusText',
-    slot: '',
-    minWidth: '110px',
+    width: '110px',
     align: 'left',
-    ellipsis: true,
-    formatter: (row, column, cellValue) => {
-      return cellValue;
-    }
-  },
-  { title: '操作', slot: 'action', width: '255px', align: 'left', fixed: 'right' }
+    ellipsis: true
+  }
 ];
 const listApi = {
   requestFun: matchList,

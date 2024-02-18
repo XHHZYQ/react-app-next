@@ -63,12 +63,13 @@ const pushOperationItem = (columns, rowOperationList) => {
   if (rowOperationList.length) {
     const actions = {
       title: '操作',
+      fixed: 'right',
       render: (text, record) => {
         return rowOperationList.map((item, index) =>
           showHandle(record, item) ? (
             <Button
               key={index}
-              className={index > 0 ? Style.antBtnSpace : null }
+              className={index > 0 ? Style.antBtnSpace : null}
               onClick={() => typeof item.handle === 'function' && item.handle(record, item)}
               disabled={disabledHandle(record, item)}
               type={item.type || 'link'}
@@ -85,26 +86,27 @@ const pushOperationItem = (columns, rowOperationList) => {
   }
 };
 
-
 /**
  * table 组件
  **/
 const ATable = (props) => {
   const {
+    scroll = { x: true, scrollToFirstRowOnChange: true },
     excludeResetKey = [],
-      searchParams = {},
-      formList = [],
-      tableData = [],
-      columns,
-      rowOperationList = [],
-      bordered = false,
-      listApi,
-      pagination = { position: 'bottomCenter' }
+    searchParams = {},
+    formList = [],
+    tableData = [],
+    columns,
+    rowOperationList = [],
+    bordered = false,
+    listApi,
+    pagination = { position: 'bottomCenter' }
   } = props;
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState(tableData);
 
-  useEffect(() => { // 表格列设置(挂载时只执行一次)
+  useEffect(() => {
+    // 表格列设置(挂载时只执行一次)
     pushOperationItem(columns, rowOperationList);
     setTableList();
   }, []);
@@ -119,9 +121,15 @@ const ATable = (props) => {
 
   return (
     <div className={Style.ATableContainer}>
-      <TableSearch excludeResetKey={excludeResetKey} formList={formList} searchParams={searchParams} setTableList={setTableList} />
+      <TableSearch
+        excludeResetKey={excludeResetKey}
+        formList={formList}
+        searchParams={searchParams}
+        setTableList={setTableList}
+      />
 
       <Table
+        scroll={scroll}
         columns={columns}
         loading={loading}
         bordered={bordered}
