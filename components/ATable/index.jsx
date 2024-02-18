@@ -1,37 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Table, Button } from 'antd';
 import TableSearch from './TableSearch';
 import Style from './index.module.scss';
-
-// 获取 table 数据
-export const getTableList = async (
-  { requestFun, initFetch = true, resultKey = 'list', beforeSubmit, responseHandle, afterHandle },
-  params = {}
-) => {
-  if (!initFetch) return;
-  let values = { ...params };
-  if (typeof beforeSubmit === 'function') {
-    params = beforeSubmit(values);
-  }
-
-  const searchParams = { ...params, page: 1, limit: 10 };
-  const {
-    data: { content }
-  } = await requestFun(searchParams);
-  let list = content[resultKey];
-
-  if (typeof responseHandle === 'function') {
-    list = responseHandle(list);
-  }
-
-  list = list.map((item) => ({ ...item, key: item.id }));
-
-  if (typeof afterHandle === 'function') {
-    afterHandle(content);
-  }
-
-  return list;
-};
 
 // 按钮禁用判断
 const disabledHandle = (record, item) => {
@@ -58,6 +28,14 @@ const handleHref = (record, item) => {
   return typeof item.href === 'function' ? item.href(record, item) : item.href;
 };
 
+const handleLabel = (record, item) => {
+  if (typeof item.label === 'function') {
+    return item.label(record, item);
+  } else {
+    return item.label;
+  }
+};
+
 // 添加操作列
 const pushOperationItem = (columns, rowOperationList) => {
   if (rowOperationList.length) {
@@ -66,17 +44,18 @@ const pushOperationItem = (columns, rowOperationList) => {
       fixed: 'right',
       render: (text, record) => {
         return rowOperationList.map((item, index) =>
-          showHandle(record, item) ? (
+          showHandle(record, item) && handleLabel(record, item) ? (
             <Button
               key={index}
               className={index > 0 ? Style.antBtnSpace : null}
               onClick={() => typeof item.handle === 'function' && item.handle(record, item)}
               disabled={disabledHandle(record, item)}
-              type={item.type || 'link'}
+              type={item.type && item.type !== 'danger' ? item.type : 'link'}
+              danger={item.type === 'danger' ? true : false}
               href={handleHref(record, item)}
               target={item.target || '_self'}
             >
-              {item.label}
+              {handleLabel(record, item)}
             </Button>
           ) : null
         );
@@ -89,7 +68,7 @@ const pushOperationItem = (columns, rowOperationList) => {
 /**
  * table 组件
  **/
-const ATable = (props) => {
+const ATable = forwardRef((props, ref) => {
   const {
     scroll = { x: true, scrollToFirstRowOnChange: true },
     excludeResetKey = [],
@@ -102,6 +81,9 @@ const ATable = (props) => {
     listApi,
     pagination = { position: 'bottomCenter' }
   } = props;
+
+  useImperativeHandle(ref, () => ({ getTableList }));
+
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState(tableData);
 
@@ -111,10 +93,40 @@ const ATable = (props) => {
     setTableList();
   }, []);
 
+  // 获取 table 数据
+  const getTableList = async (params = {}) => {
+    const { requestFun, initFetch = true, resultKey = 'list', beforeSubmit, responseHandle, afterHandle } = listApi;
+
+    if (!initFetch) return;
+
+    let values = { ...params };
+    if (typeof beforeSubmit === 'function') {
+      params = beforeSubmit(values);
+    }
+
+    const param = { ...params, page: 1, limit: 10 };
+    const { data: { content } } = await requestFun(param);
+    let list = content[resultKey];
+
+    if (typeof responseHandle === 'function') {
+      list = responseHandle(list);
+    }
+
+    list = list.map((item) => ({ ...item, key: item.id }));
+
+    if (typeof afterHandle === 'function') {
+      afterHandle(content);
+    }
+
+    return list;
+  };
+
   // 设置表格数据
-  const setTableList = async (values = {}) => {
+  const setTableList = async (values) => {
     setLoading(true);
-    const list = await getTableList(listApi, values);
+    values = typeof values !== 'undefined' ? values : searchParams;
+    console.log('values', values);
+    const list = await getTableList(values);
     setLoading(false);
     setDataSource(list);
   };
@@ -138,6 +150,6 @@ const ATable = (props) => {
       />
     </div>
   );
-};
+});
 
 export default ATable;

@@ -40,3 +40,27 @@ export const matchEdit = (params) => Axios({
   method: "POST",
   data: params,
 });
+
+/**
+ * @description 赛事-发布
+ */
+export const matchPublish = (params) => {
+  return Axios({
+    url: AdminBaseUrl + '/match-index/publish',
+    headers: AdminHeaders,
+    method: "POST",
+    data: params
+  });
+};
+/**
+ * 
+ * @description 赛事-停止发布
+ */
+export const matchStop = (params) => {
+  return Axios({
+    url: AdminBaseUrl + '/match-index/stop',
+    headers: AdminHeaders,
+    method: "POST",
+    data: params
+  });
+};
