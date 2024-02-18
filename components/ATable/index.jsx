@@ -36,35 +36,6 @@ const handleLabel = (record, item) => {
   }
 };
 
-// 添加操作列
-const pushOperationItem = (columns, rowOperationList) => {
-  if (rowOperationList.length) {
-    const actions = {
-      title: '操作',
-      fixed: 'right',
-      render: (text, record) => {
-        return rowOperationList.map((item, index) =>
-          showHandle(record, item) && handleLabel(record, item) ? (
-            <Button
-              key={index}
-              className={index > 0 ? Style.antBtnSpace : null}
-              onClick={() => typeof item.handle === 'function' && item.handle(record, item)}
-              disabled={disabledHandle(record, item)}
-              type={item.type && item.type !== 'danger' ? item.type : 'link'}
-              danger={item.type === 'danger' ? true : false}
-              href={handleHref(record, item)}
-              target={item.target || '_self'}
-            >
-              {handleLabel(record, item)}
-            </Button>
-          ) : null
-        );
-      }
-    };
-    columns[columns.length - 1] = actions;
-  }
-};
-
 /**
  * table 组件
  **/
@@ -86,11 +57,42 @@ const ATable = forwardRef((props, ref) => {
 
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState(tableData);
+  const [columnList, setColumnList] = useState(columns);
+
+
+  // 添加操作列
+  const pushOperationItem = () => {
+    if (rowOperationList.length) {
+      const actions = {
+        title: '操作',
+        fixed: 'right',
+        render: (text, record) => {
+          return rowOperationList.map((item, index) =>
+            showHandle(record, item) && handleLabel(record, item) ? (
+              <Button
+                key={index}
+                className={index > 0 ? Style.antBtnSpace : null}
+                onClick={() => typeof item.handle === 'function' && item.handle(record, item)}
+                disabled={disabledHandle(record, item)}
+                type={item.type && item.type !== 'danger' ? item.type : 'link'}
+                danger={item.type === 'danger' ? true : false}
+                href={handleHref(record, item)}
+                target={item.target || '_self'}
+              >
+                {handleLabel(record, item)}
+              </Button>
+            ) : null
+          );
+        }
+      };
+      setColumnList([...columnList, actions]);
+    }
+  };
 
   useEffect(() => {
     // 表格列设置(挂载时只执行一次)
-    pushOperationItem(columns, rowOperationList);
     setTableList();
+    pushOperationItem();
   }, []);
 
   // 获取 table 数据
@@ -142,7 +144,7 @@ const ATable = forwardRef((props, ref) => {
 
       <Table
         scroll={scroll}
-        columns={columns}
+        columns={columnList}
         loading={loading}
         bordered={bordered}
         dataSource={dataSource}

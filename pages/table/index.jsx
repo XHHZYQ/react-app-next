@@ -1,12 +1,14 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, message } from 'antd';
 import ATable from '../../components/ATable';
-import Modal from './modal';
+import DisplayCtrlModal from './modal';
 import { matchList, matchStop, matchPublish } from '../../api/index.js';
 
 const MyTable = ({ tableData = [] }) => {
   const tableRef = useRef(null);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [matchData, setMatchData] = useState({});
   const router = useRouter();
 
   // 发布、停止赛事
@@ -24,7 +26,7 @@ const MyTable = ({ tableData = [] }) => {
       message.open({
         content: `${+row.status === 3 ? '停止' : '发布'}赛事成功`,
         type: 'success'
-      })
+      });
 
       tableRef.current.getTableList(searchParams);
     });
@@ -35,7 +37,6 @@ const MyTable = ({ tableData = [] }) => {
     // status => 1:草稿, 2:待发布, 3:已发布
     return [3].includes(+row.status) && +row.nowTime >= +row.endTime;
   };
-
 
   const listApi = {
     requestFun: matchList,
@@ -205,8 +206,8 @@ const MyTable = ({ tableData = [] }) => {
       label: '前台展示',
       handle: (row) => {
         const { id, displayCtrl } = row;
-        // matchData = { id, displayCtrl };
-        // dialog.displayVisible = true;
+        setMatchData({ ...matchData, id, displayCtrl });
+        setDialogVisible(true );
       }
     },
     {
@@ -226,6 +227,11 @@ const MyTable = ({ tableData = [] }) => {
     }
   ];
 
+  const closeModal = () => {
+    setDialogVisible(false);
+    tableRef.current.getTableList(searchParams);
+   };
+
   return (
     <>
       <ATable
@@ -239,7 +245,7 @@ const MyTable = ({ tableData = [] }) => {
         listApi={listApi}
       />
 
-    <Modal isOpen={dialog.visible} />
+      <DisplayCtrlModal isOpen={dialogVisible} matchData={matchData} closeModal={closeModal} />
     </>
   );
 };

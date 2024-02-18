@@ -64,3 +64,12 @@ export const matchStop = (params) => {
     data: params
   });
 };
+
+
+/** @description 赛事修改显示控制状态 */
+export const matchDisplayCtrl = params => Axios({
+  url: AdminBaseUrl + '/match-index/update-display-ctrl',
+  headers: AdminHeaders,
+  method: "POST",
+  data: params
+});

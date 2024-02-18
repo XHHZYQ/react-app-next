@@ -32,6 +32,7 @@ const AForm = (props) => {
     labelCol = { span: 8 },
     wrapperCol = { span: 16 },
     maxWidth = { maxWidth: 600 },
+    resetBtnShow = false,
     submitBtnText = '确定',
     cancelBtnText = '重置'
   } = props;
@@ -237,9 +238,11 @@ const AForm = (props) => {
           <Button loading={loading} type="primary" htmlType="submit">
             {submitBtnText}
           </Button>
-          <Button onClick={resetSearch} style={{ marginLeft: '10px' }}>
-            {cancelBtnText}
-          </Button>
+          { resetBtnShow ?
+              <Button onClick={resetSearch} style={{ marginLeft: '10px' }}>
+                {cancelBtnText}
+              </Button>
+              : null }
         </Form.Item>
       </Form>
     </div>
