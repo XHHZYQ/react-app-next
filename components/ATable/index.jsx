@@ -53,7 +53,7 @@ const ATable = forwardRef((props, ref) => {
     pagination = { position: 'bottomCenter' }
   } = props;
 
-  useImperativeHandle(ref, () => ({ getTableList }));
+  useImperativeHandle(ref, () => ({ setTableList }));
 
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState(tableData);
@@ -66,6 +66,7 @@ const ATable = forwardRef((props, ref) => {
       const actions = {
         title: '操作',
         fixed: 'right',
+        align: 'left',
         render: (text, record) => {
           return rowOperationList.map((item, index) =>
             showHandle(record, item) && handleLabel(record, item) ? (
@@ -107,7 +108,7 @@ const ATable = forwardRef((props, ref) => {
     }
 
     const param = { ...params, page: 1, limit: 10 };
-    const { data: { content } } = await requestFun(param);
+    const { content } = await requestFun(param);
     let list = content[resultKey];
 
     if (typeof responseHandle === 'function') {

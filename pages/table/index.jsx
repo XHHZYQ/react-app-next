@@ -28,7 +28,7 @@ const MyTable = ({ tableData = [] }) => {
         type: 'success'
       });
 
-      tableRef.current.getTableList(searchParams);
+      tableRef.current.setTableList(searchParams);
     });
   };
 
@@ -43,7 +43,6 @@ const MyTable = ({ tableData = [] }) => {
     initFetch: true,
     resultKey: 'list',
     beforeSubmit: (params) => {
-      params.lessonType = '1';
       const { startEndTime } = params;
       if (startEndTime?.length) {
         params.startTime = startEndTime[0];
@@ -60,66 +59,123 @@ const MyTable = ({ tableData = [] }) => {
   };
 
   const searchParams = {
-    lessonType: '1',
-    classId: undefined,
-    lessonId: undefined,
-    startTime: undefined,
-    endTime: undefined
+    name: undefined,
+    year: undefined,
+    domain: undefined,
+    level: undefined,
+    language: undefined,
+    startTime: ''
   };
 
-  const formList = [
-    {
+  // const formList = [
+  //   {
+  //     inputType: 'input',
+  //     label: '输入框',
+  //     model: 'classId',
+  //     placeholder: '请输入。。',
+  //     change: (e) => {
+  //       console.log('输入框 change', e.target.value);
+  //     }
+  //     // disabled: true
+  //   },
+  //   {
+  //     inputType: 'select',
+  //     label: '选择框',
+  //     model: 'lessonId',
+  //     placeholder: '请选择。。',
+  //     change: (value) => {
+  //       console.log(`selected ${value}`);
+  //     },
+  //     options: [
+  //       {
+  //         label: '图形化AI课',
+  //         value: '3'
+  //       },
+  //       {
+  //         label: 'TDOG人工智能编程课程PYTHON版',
+  //         value: '6'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     inputType: 'rangePicker',
+  //     picker: '',
+  //     label: '日期',
+  //     model: 'startEndTime',
+  //     placeholder: ['开始日期', '结束日期'],
+  //     // disabled: true
+  //     // change: (date, dateString) => {
+  //     //   console.log('输入框 change', date, dateString);
+  //     // },
+  //     format: () => 'YYYY-MM-DD HH:mm:ss',
+  //     disabledDate: (currentDate) => {
+  //       const oneDay = 1000 * 60 * 60 * 24;
+  //       if (currentDate < Date.now() - oneDay * 2) {
+  //         return true;
+  //       } else if (currentDate > Date.now() + oneDay * 5) {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     }
+  //   }
+  // ];
+  const formItems = {
+    name: {
+      index: 0,
+      label: '赛事名称',
       inputType: 'input',
-      label: '输入框',
-      model: 'classId',
-      placeholder: '请输入。。',
-      change: (e) => {
-        console.log('输入框 change', e.target.value);
-      }
-      // disabled: true
+      model: 'name',
+      placeholder: '请输入赛事名称',
+      options: []
     },
-    {
+    year: {
+      index: 1,
+      label: '赛事年度',
+      inputType: 'input',
+      model: 'year',
+      placeholder: '请输入赛事年度',
+      options: []
+    },
+    domain: {
+      index: 2,
+      label: '赛事域名',
+      inputType: 'input',
+      model: 'domain',
+      placeholder: '请输入赛事域名',
+      options: []
+    },
+    level: {
+      index: 3,
+      label: '学段',
       inputType: 'select',
-      label: '选择框',
-      model: 'lessonId',
-      placeholder: '请选择。。',
-      change: (value) => {
-        console.log(`selected ${value}`);
-      },
-      options: [
-        {
-          label: '图形化AI课',
-          value: '3'
-        },
-        {
-          label: 'TDOG人工智能编程课程PYTHON版',
-          value: '6'
-        }
-      ]
+      model: 'level',
+      placeholder: '请选择学段',
+      options: []
     },
-    {
-      inputType: 'rangePicker',
-      picker: '',
-      label: '日期',
-      model: 'startEndTime',
-      placeholder: ['开始日期', '结束日期'],
-      // disabled: true
-      // change: (date, dateString) => {
-      //   console.log('输入框 change', date, dateString);
-      // },
-      format: () => 'YYYY-MM-DD HH:mm:ss',
-      disabledDate: (currentDate) => {
-        const oneDay = 1000 * 60 * 60 * 24;
-        if (currentDate < Date.now() - oneDay * 2) {
-          return true;
-        } else if (currentDate > Date.now() + oneDay * 5) {
-          return true;
-        } else {
-          return false;
-        }
-      }
+    language: {
+      index: 4,
+      label: '语言',
+      inputType: 'select',
+      model: 'language',
+      placeholder: '请选择语言',
+      options: []
+    },
+    startTime: {
+      index: 5,
+      label: '比赛日期',
+      inputType: 'datePicker',
+      model: 'startTime',
+      placeholder: '请选择比赛日期',
+      valueFormat: 'x',
+      format: 'YYYY-MM-DD',
+      options: []
     }
-  ];
+  };
+
+  const arr = Object.values(formItems);
+  arr.sort((a, b) => a.index - b.index);
+  const formList = arr;
 
   const columns = [
     {
@@ -207,7 +263,7 @@ const MyTable = ({ tableData = [] }) => {
       handle: (row) => {
         const { id, displayCtrl } = row;
         setMatchData({ ...matchData, id, displayCtrl });
-        setDialogVisible(true );
+        setDialogVisible(true);
       }
     },
     {
@@ -229,14 +285,14 @@ const MyTable = ({ tableData = [] }) => {
 
   const closeModal = () => {
     setDialogVisible(false);
-    tableRef.current.getTableList(searchParams);
-   };
+    tableRef.current.setTableList(searchParams);
+  };
 
   return (
     <>
       <ATable
         ref={tableRef}
-        excludeResetKey={['lessonType']}
+        excludeResetKey={[]}
         searchParams={searchParams}
         formList={formList}
         tableData={tableData}

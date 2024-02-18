@@ -58,7 +58,7 @@ const AForm = (props) => {
   const getDetail = () => {
     const { requestFun, params, resultKey, resultHandle, afterHandle } = detailParam;
 
-    requestFun(params).then(({ data: { content = {} } }) => {
+    requestFun(params).then(({ content = {} }) => {
       let resValue = {};
       if (typeof resultHandle === 'function') {
         // 父组件有处理方法，但没有返回值，说明父组件处理了data，不需要再处理
