@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import { Button, message } from 'antd';
 import ATable from '../../components/ATable';
+import Modal from './modal';
 import { matchList, matchStop, matchPublish } from '../../api/index.js';
 
 const MyTable = ({ tableData = [] }) => {
@@ -226,7 +227,7 @@ const MyTable = ({ tableData = [] }) => {
   ];
 
   return (
-    <div>
+    <>
       <ATable
         ref={tableRef}
         excludeResetKey={['lessonType']}
@@ -237,7 +238,9 @@ const MyTable = ({ tableData = [] }) => {
         rowOperationList={rowOperationList}
         listApi={listApi}
       />
-    </div>
+
+    <Modal isOpen={dialog.visible} />
+    </>
   );
 };
 
