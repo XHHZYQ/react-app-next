@@ -1,9 +1,9 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Button, message } from 'antd';
 import ATable from '../../components/ATable';
 import DisplayCtrlModal from './modal';
-import { matchList, matchStop, matchPublish } from '../../api/index.js';
+import { matchOptions, matchList, matchStop, matchPublish } from '../../api/index.js';
 
 const MyTable = ({ tableData = [] }) => {
   const tableRef = useRef(null);
@@ -64,63 +64,10 @@ const MyTable = ({ tableData = [] }) => {
     domain: undefined,
     level: undefined,
     language: undefined,
-    startTime: ''
+    startTime: undefined
   };
 
-  // const formList = [
-  //   {
-  //     inputType: 'input',
-  //     label: '输入框',
-  //     model: 'classId',
-  //     placeholder: '请输入。。',
-  //     change: (e) => {
-  //       console.log('输入框 change', e.target.value);
-  //     }
-  //     // disabled: true
-  //   },
-  //   {
-  //     inputType: 'select',
-  //     label: '选择框',
-  //     model: 'lessonId',
-  //     placeholder: '请选择。。',
-  //     change: (value) => {
-  //       console.log(`selected ${value}`);
-  //     },
-  //     options: [
-  //       {
-  //         label: '图形化AI课',
-  //         value: '3'
-  //       },
-  //       {
-  //         label: 'TDOG人工智能编程课程PYTHON版',
-  //         value: '6'
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     inputType: 'rangePicker',
-  //     picker: '',
-  //     label: '日期',
-  //     model: 'startEndTime',
-  //     placeholder: ['开始日期', '结束日期'],
-  //     // disabled: true
-  //     // change: (date, dateString) => {
-  //     //   console.log('输入框 change', date, dateString);
-  //     // },
-  //     format: () => 'YYYY-MM-DD HH:mm:ss',
-  //     disabledDate: (currentDate) => {
-  //       const oneDay = 1000 * 60 * 60 * 24;
-  //       if (currentDate < Date.now() - oneDay * 2) {
-  //         return true;
-  //       } else if (currentDate > Date.now() + oneDay * 5) {
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     }
-  //   }
-  // ];
-  const formItems = {
+  const formItem = {
     name: {
       index: 0,
       label: '赛事名称',
@@ -171,6 +118,33 @@ const MyTable = ({ tableData = [] }) => {
       format: 'YYYY-MM-DD',
       options: []
     }
+  };
+
+  const [formItems, setFormItems] = useState(formItem);
+  useEffect(() => {
+    getOptions();
+  }, []);
+
+  // 获取下拉选项
+  const getOptions = () => {
+    const params = { fields: ['level', 'language'] };
+    matchOptions(params).then(({ content }) => {
+      const { level, language } = content;
+      const levelOptions = level?.map(item => ({ label: item.value, value: item.key }));
+      const languageOptions = language?.map(item => ({ label: item.value, value: item.key }));
+
+      setFormItems(prevFormItems => ({
+        ...prevFormItems,
+        level: {
+          ...prevFormItems.level,
+          options: levelOptions
+        },
+        language: {
+          ...prevFormItems.language,
+          options: languageOptions
+        },
+      }));
+    });
   };
 
   const arr = Object.values(formItems);
@@ -283,6 +257,7 @@ const MyTable = ({ tableData = [] }) => {
     }
   ];
 
+  // 关闭弹窗
   const closeModal = () => {
     setDialogVisible(false);
     tableRef.current.setTableList(searchParams);

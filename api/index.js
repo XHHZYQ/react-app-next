@@ -6,6 +6,14 @@ const AdminHeaders = {
   Authorization: 'c3500fdedec0a3416be7f8fd2a397381'
 };
 
+/**
+ * @description 赛事列表-下拉选项
+ */
+export const matchOptions = (params) => $post({
+  url: '/match-index/options',
+  params
+});
+
 export const matchList = (params) =>
   $post({
     url: `/match-index/list`,

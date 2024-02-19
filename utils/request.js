@@ -4,9 +4,7 @@ import Qs from 'qs';
 import { message } from 'antd';
 import { getToken } from './cookieApi.js';
 // import { handleLogout } from '@/util/index.js';
-// import { useRouter } from 'next/router';
 
-// const router = useRouter();
 // const apiPrefix = import.meta.env.VITE_API_PREFIX;
 // const baseUrl = import.meta.env.VITE_API_URL + apiPrefix;
 const baseUrl = 'http://service-tdog.sjhh-test.com/saas-admin';
@@ -103,7 +101,7 @@ instance.interceptors.response.use((res) => {
     // isConfirm = true;
     return Promise.reject(resData);
   } else if (resData.code === 403) {// 403 无权限
-    // router.push('/404'); //403 也跳转该页面
+    location.href = location.origin + '/404'; //403 也跳转该页面
     message.open({ type: 'error', content: '对不起，您没有权限访问该页面' });
 
     return Promise.reject(resData);
