@@ -32,6 +32,7 @@ const AForm = (props) => {
     labelCol = { span: 8 },
     wrapperCol = { span: 16 },
     maxWidth = { maxWidth: 600 },
+    resetBtnShow = false,
     submitBtnText = '确定',
     cancelBtnText = '重置'
   } = props;
@@ -57,7 +58,7 @@ const AForm = (props) => {
   const getDetail = () => {
     const { requestFun, params, resultKey, resultHandle, afterHandle } = detailParam;
 
-    requestFun(params).then(({ data: { content = {} } }) => {
+    requestFun(params).then(({ content = {} }) => {
       let resValue = {};
       if (typeof resultHandle === 'function') {
         // 父组件有处理方法，但没有返回值，说明父组件处理了data，不需要再处理
@@ -237,9 +238,11 @@ const AForm = (props) => {
           <Button loading={loading} type="primary" htmlType="submit">
             {submitBtnText}
           </Button>
-          <Button onClick={resetSearch} style={{ marginLeft: '10px' }}>
-            {cancelBtnText}
-          </Button>
+          { resetBtnShow ?
+              <Button onClick={resetSearch} style={{ marginLeft: '10px' }}>
+                {cancelBtnText}
+              </Button>
+              : null }
         </Form.Item>
       </Form>
     </div>
