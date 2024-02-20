@@ -2,9 +2,9 @@
 import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, message } from 'antd';
-import ATable from '../../../components/ATable/index';
+import ATable from '@/components/ATable/index';
 import DisplayCtrlModal from './modal';
-import { matchOptions, matchList, matchStop, matchPublish } from '../../../api/index.js';
+import { matchOptions, matchList, matchStop, matchPublish } from '@/api/index.js';
 
 const MyTable = ({ tableData = [] }) => {
   const tableRef = useRef(null);

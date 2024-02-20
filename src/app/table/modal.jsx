@@ -1,8 +1,8 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { Modal } from 'antd';
-import AForm from '../../../components/AForm/index.jsx';
-import { matchDisplayCtrl } from '../../../api/index.js';
+import AForm from '@/components/AForm/index.jsx';
+import { matchDisplayCtrl } from '@/api/index.js';
 
 const DisplayCtrlModal = (props) => {
   const { isOpen, matchData, closeModal } = props;

@@ -1,9 +1,9 @@
 "use client"
 import { useSearchParams } from 'next/navigation';
-import AForm from '../../../components/AForm/index.jsx';
+import AForm from '@/components/AForm/index.jsx';
 import styles from './form.module.scss';
 import { useEffect, useState } from 'react';
-import { matchAdd, matchDetail, matchEdit } from '../../../api/index.js';
+import { matchAdd, matchDetail, matchEdit } from '@/api/index.js';
 import dayjs from 'dayjs';
 
 let actionType = { value: 'add' };
