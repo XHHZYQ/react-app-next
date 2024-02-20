@@ -254,7 +254,6 @@ const MyForm = () => {
   }, []);
 
   return (
-    <div className={styles.formBox} style={{ marginBottom: '20px' }}>
       <AForm
         maxWidth={{ maxWidth: 670 }}
         actionType={actionType}
@@ -266,7 +265,6 @@ const MyForm = () => {
         editParam={editParam}
         detailParam={detailParam}
       />
-    </div>
   );
 };
 

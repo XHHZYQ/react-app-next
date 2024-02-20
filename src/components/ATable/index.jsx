@@ -77,7 +77,6 @@ const ATable = forwardRef((props, ref) => {
             showHandle(record, item) && handleLabel(record, item) ? (
               <Button
                 key={index}
-                className={index > 0 ? Style.antBtnSpace : null}
                 onClick={() => typeof item.handle === 'function' && item.handle(record, item)}
                 disabled={disabledHandle(record, item)}
                 type={item.type && item.type !== 'danger' ? item.type : 'link'}

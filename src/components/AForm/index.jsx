@@ -187,7 +187,7 @@ const AForm = (props) => {
   };
 
   return (
-    <div className={styles.formBox} style={{ marginBottom: '40px' }}>
+    <div className={styles['form-box']}>
       <Form
         form={form}
         labelCol={labelCol}
