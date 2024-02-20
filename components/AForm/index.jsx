@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 import { Button, Form, message } from 'antd';
 import {
   ASelect,
@@ -39,9 +39,10 @@ const AForm = (props) => {
 
   const [form] = Form.useForm();
   let [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const { query: { id } } = router;
-  const queryId = id;
+  // const router = useRouter();
+  // const { query: { id } } = router;
+  const searchParams = useSearchParams();
+  const queryId = searchParams.get('id')
 
   useEffect(() => {
     console.log('子组件 effect 1');

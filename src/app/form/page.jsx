@@ -1,8 +1,9 @@
-import { useRouter } from 'next/router';
-import AForm from '../../components/AForm/index.jsx';
+"use client"
+import { useSearchParams } from 'next/navigation';
+import AForm from '../../../components/AForm/index.jsx';
 import styles from './form.module.scss';
 import { useEffect, useState } from 'react';
-import { matchAdd, matchDetail, matchEdit } from 'api/index.js';
+import { matchAdd, matchDetail, matchEdit } from '../../../api/index.js';
 import dayjs from 'dayjs';
 
 let actionType = { value: 'add' };
@@ -215,11 +216,8 @@ arr.sort((a, b) => a.index - b.index);
 const formList = arr;
 
 const MyForm = () => {
-  const router = useRouter();
-  const {
-    query: { id }
-  } = router;
-  const queryId = id;
+  const searchParams = useSearchParams()
+  const queryId = searchParams.get('id')
 
   const addParam = {
     requestFun: matchAdd,
