@@ -2,6 +2,7 @@ import { Button, Form } from 'antd';
 import { useState, useEffect } from 'react';
 import { ASelect, AInput, ADatePicker, ARangePicker } from '../FormItem';
 import { SearchOutlined } from '@ant-design/icons';
+import Style from './tableSearch.scss';
 
 /**
  * 清空搜索条件
@@ -58,15 +59,6 @@ const TableSearch = (props) => {
   const resetSearch = () => {
     const data = resetData(formModel, excludeResetKey);
     form.setFieldsValue(data); // 重置表单
-    // setFormModel((value) => {
-    //   const newValue = {
-    //     ...value,
-    //     ...data
-    //   };
-    //   setTableList(newValue);
-    //   return newValue;
-    // });
-    // const params = form.getFieldsValue(true); // 获取当前表单值
     setTableList(data);
     console.log('formModel。。', data);
   };
@@ -74,8 +66,9 @@ const TableSearch = (props) => {
   const onValuesChange = (changedValues, allValues) => {
     setFormModel(allValues);
   };
+
   return (
-    <div style={{ marginBottom: '20px' }}>
+    <div style={{ marginBottom: '5px' }}>
       <Form
         form={form}
         labelCol={labelCol}
@@ -113,8 +106,8 @@ const TableSearch = (props) => {
 
         <Form.Item
           wrapperCol={{
-            offset: labelCol,
-            span: wrapperCol
+            offset: labelCol.span,
+            span: wrapperCol.span
           }}
         >
           <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>

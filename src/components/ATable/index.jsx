@@ -41,6 +41,10 @@ const handleLabel = (record, item) => {
  **/
 const ATable = forwardRef((props, ref) => {
   const {
+    size = 'small',
+    rowOperationWidth,
+    tableLayout = true,
+    sticky = true,
     scroll = { x: true, scrollToFirstRowOnChange: true },
     excludeResetKey = [],
     searchParams = {},
@@ -48,7 +52,7 @@ const ATable = forwardRef((props, ref) => {
     tableData = [],
     columns,
     rowOperationList = [],
-    bordered = false,
+    bordered = true,
     listApi,
     pagination = { position: 'bottomCenter' }
   } = props;
@@ -67,6 +71,7 @@ const ATable = forwardRef((props, ref) => {
         title: '操作',
         fixed: 'right',
         align: 'left',
+        width: rowOperationWidth,
         render: (text, record) => {
           return rowOperationList.map((item, index) =>
             showHandle(record, item) && handleLabel(record, item) ? (
@@ -79,6 +84,7 @@ const ATable = forwardRef((props, ref) => {
                 danger={item.type === 'danger' ? true : false}
                 href={handleHref(record, item)}
                 target={item.target || '_self'}
+                size={item.size || 'small'}
               >
                 {handleLabel(record, item)}
               </Button>
@@ -143,6 +149,8 @@ const ATable = forwardRef((props, ref) => {
         setTableList={setTableList}
       />
 
+      {/* sticky={sticky} */}
+      {/* tableLayout={tableLayout} */}
       <Table
         scroll={scroll}
         columns={columnList}
@@ -150,6 +158,7 @@ const ATable = forwardRef((props, ref) => {
         bordered={bordered}
         dataSource={dataSource}
         pagination={pagination}
+        size={size}
       />
     </div>
   );

@@ -156,7 +156,7 @@ const MyTable = ({ tableData = [] }) => {
     {
       title: '赛事名称',
       dataIndex: 'name',
-      width: '180px',
+      width: '200px',
       align: 'left',
       ellipsis: true,
       render: (text, record, index) => (
@@ -189,7 +189,7 @@ const MyTable = ({ tableData = [] }) => {
     {
       title: '比赛时间范围',
       dataIndex: 'startTimeText',
-      width: '330px',
+      width: '310px',
       align: 'left',
       ellipsis: true,
       render: (text, record) =>
@@ -198,7 +198,7 @@ const MyTable = ({ tableData = [] }) => {
     {
       title: '答题时间(分)',
       dataIndex: 'duration',
-      width: '150px',
+      width: '130px',
       align: 'left',
       ellipsis: true
     },
@@ -268,6 +268,7 @@ const MyTable = ({ tableData = [] }) => {
     <>
       <ATable
         ref={tableRef}
+        rowOperationWidth="290px"
         excludeResetKey={[]}
         searchParams={searchParams}
         formList={formList}
