@@ -1,8 +1,8 @@
 import { Button, Form } from 'antd';
-import { useState, useEffect } from 'react';
+import { useImmer } from 'use-immer';
 import { ASelect, AInput, ADatePicker, ARangePicker } from '../FormItem';
 import { SearchOutlined } from '@ant-design/icons';
-import Style from './tableSearch.scss';
+import './tableSearch.scss';
 
 /**
  * 清空搜索条件
@@ -45,7 +45,7 @@ const TableSearch = (props) => {
   } = props;
 
   const [form] = Form.useForm();
-  const [formModel, setFormModel] = useState(searchParams);
+  const [formModel, setFormModel] = useImmer(searchParams);
 
   // 查询方法
   const handleSearch = (values) => {
@@ -60,11 +60,10 @@ const TableSearch = (props) => {
     const data = resetData(formModel, excludeResetKey);
     form.setFieldsValue(data); // 重置表单
     setTableList(data);
-    console.log('formModel。。', data);
   };
 
   const onValuesChange = (changedValues, allValues) => {
-    setFormModel(allValues);
+    setFormModel({ ...formModel, ...allValues });
   };
 
   return (

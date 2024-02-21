@@ -2,7 +2,7 @@
 import { useSearchParams } from 'next/navigation';
 import AForm from '@/components/AForm/index.jsx';
 import styles from './form.module.scss';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { matchAdd, matchDetail, matchEdit } from '@/api/index.js';
 import dayjs from 'dayjs';
 
@@ -215,7 +215,7 @@ const arr = Object.values(formItems);
 arr.sort((a, b) => a.index - b.index);
 const formList = arr;
 
-const MyForm = () => {
+const Form = () => {
   const searchParams = useSearchParams()
   const queryId = searchParams.get('id')
 
@@ -247,10 +247,8 @@ const MyForm = () => {
     beforeHandle: null,
     resultHandle: null
   };
-  console.log('父组件。。');
 
   useEffect(() => {
-    console.log('父组件 effect', queryId);
   }, []);
 
   return (
@@ -268,4 +266,4 @@ const MyForm = () => {
   );
 };
 
-export default MyForm;
+export default Form;

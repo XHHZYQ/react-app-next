@@ -1,15 +1,17 @@
 "use client"
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button, message } from 'antd';
+import { produce } from 'immer';
+import { useImmer } from 'use-immer';
 import ATable from '@/components/ATable/index';
 import DisplayCtrlModal from './modal';
 import { matchOptions, matchList, matchStop, matchPublish } from '@/api/index.js';
 
-const MyTable = ({ tableData = [] }) => {
+const Table = ({ tableData = [] }) => {
   const tableRef = useRef(null);
-  const [dialogVisible, setDialogVisible] = useState(false);
-  const [matchData, setMatchData] = useState({});
+  const [dialogVisible, setDialogVisible] = useImmer(false);
+  const [matchData, setMatchData] = useImmer({});
   const router = useRouter();
 
   // 发布、停止赛事
@@ -121,7 +123,7 @@ const MyTable = ({ tableData = [] }) => {
     }
   };
 
-  const [formItems, setFormItems] = useState(formItem);
+  const [formItems, setFormItems] = useImmer(formItem);
   useEffect(() => {
     getOptions();
   }, []);
@@ -134,17 +136,10 @@ const MyTable = ({ tableData = [] }) => {
       const levelOptions = level?.map(item => ({ label: item.value, value: item.key }));
       const languageOptions = language?.map(item => ({ label: item.value, value: item.key }));
 
-      setFormItems(prevFormItems => ({
-        ...prevFormItems,
-        level: {
-          ...prevFormItems.level,
-          options: levelOptions
-        },
-        language: {
-          ...prevFormItems.language,
-          options: languageOptions
-        },
-      }));
+      setFormItems(pre => {
+        pre.level.options = levelOptions;
+        pre.language.options = languageOptions;
+      });
     });
   };
 
@@ -237,7 +232,11 @@ const MyTable = ({ tableData = [] }) => {
       label: '前台展示',
       handle: (row) => {
         const { id, displayCtrl } = row;
-        setMatchData({ ...matchData, id, displayCtrl });
+        setMatchData((draft) => {
+          draft= id;
+          draft.displayCtrl = displayCtrl;
+        });
+
         setDialogVisible(true);
       }
     },
@@ -283,7 +282,7 @@ const MyTable = ({ tableData = [] }) => {
   );
 };
 
-export default MyTable;
+export default Table;
 
 // export const getStaticProps = async () => {
 //   const tableData = await getTableList(listApi, searchParams);

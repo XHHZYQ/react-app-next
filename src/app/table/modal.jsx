@@ -1,5 +1,6 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useImmer } from 'use-immer';
 import { Modal } from 'antd';
 import AForm from '@/components/AForm/index.jsx';
 import { matchDisplayCtrl } from '@/api/index.js';
@@ -29,13 +30,12 @@ const DisplayCtrlModal = (props) => {
     } else {
       data.displayCtrl = 0; // 一个都未选择时传 0
     }
-    console.log('data。。', data);
     return data;
   };
 
   // 表单参数
   const actionType = { value: 'add' };
-  const [formModel, setFormModel] = useState({
+  const [formModel, setFormModel] = useImmer({
     displayCtrl: []
   });
   const formRules = {
@@ -62,7 +62,9 @@ const DisplayCtrlModal = (props) => {
         arr.push(item.value);
       }
     });
-    setFormModel({...formModel, displayCtrl: arr});
+    setFormModel((draft) => {
+      draft.displayCtrl = arr;
+    });
   }, [matchData]);
 
 

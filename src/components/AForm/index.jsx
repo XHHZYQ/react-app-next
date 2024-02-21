@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useImmer } from 'use-immer';
 import { Button, Form, message } from 'antd';
 import {
   ASelect,
@@ -38,19 +39,17 @@ const AForm = (props) => {
   } = props;
 
   const [form] = Form.useForm();
-  let [loading, setLoading] = useState(false);
+  let [loading, setLoading] = useImmer(false);
   // const router = useRouter();
   // const { query: { id } } = router;
   const searchParams = useSearchParams();
   const queryId = searchParams.get('id')
 
   useEffect(() => {
-    console.log('子组件 effect 1');
     form.setFieldsValue(formModel);
   }, []);
 
   useEffect(() => {
-    console.log('子组件 effect 2 queryId', queryId);
     if (queryId && detailParam.initFetch) {
       getDetail();
     }

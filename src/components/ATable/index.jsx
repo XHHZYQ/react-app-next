@@ -1,4 +1,5 @@
 import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useImmer } from 'use-immer';
 import { Table, Button } from 'antd';
 import TableSearch from './TableSearch';
 import Style from './index.module.scss';
@@ -59,9 +60,9 @@ const ATable = forwardRef((props, ref) => {
 
   useImperativeHandle(ref, () => ({ setTableList }));
 
-  const [loading, setLoading] = useState(false);
-  const [dataSource, setDataSource] = useState(tableData);
-  const [columnList, setColumnList] = useState(columns);
+  const [loading, setLoading] = useImmer(false);
+  const [dataSource, setDataSource] = useImmer(tableData);
+  const [columnList, setColumnList] = useImmer(columns);
 
 
   // 添加操作列
@@ -91,7 +92,9 @@ const ATable = forwardRef((props, ref) => {
           );
         }
       };
-      setColumnList([...columnList, actions]);
+      setColumnList((draft) => {
+        draft[draft.length - 1] = actions;
+      });
     }
   };
 
@@ -133,10 +136,9 @@ const ATable = forwardRef((props, ref) => {
   const setTableList = async (values) => {
     setLoading(true);
     values = typeof values !== 'undefined' ? values : searchParams;
-    console.log('values', values);
     const list = await getTableList(values);
     setLoading(false);
-    setDataSource(list);
+    setDataSource(() => list);
   };
 
   return (

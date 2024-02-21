@@ -133,7 +133,6 @@ const fetch = (options, configParam) => {
 
   return instance(options).then((res) => {
     let resData = res.data;
-    // console.log('调用 http 进入成功', res);
 
     if (resData.code === 0) { // 0：成功
       return resData; // resolve只接收一个参数
@@ -141,7 +140,6 @@ const fetch = (options, configParam) => {
       throw res;
     }
   }).catch((err) => {
-    // console.log('调用 http 进入失败', err.response, err);
     let errData = (err || err.response || {}).data;
 
     if (errData) { // errData 为一大对象包含 data 属性, eg. {..., data: { code, data, msg } }
