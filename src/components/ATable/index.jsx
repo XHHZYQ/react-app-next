@@ -63,6 +63,7 @@ const ATable = forwardRef((props, ref) => {
   const [loading, setLoading] = useImmer(false);
   const [dataSource, setDataSource] = useImmer(tableData);
   const [columnList, setColumnList] = useImmer(columns);
+  const [paginationConfig, setPagination] = useImmer(pagination);
 
 
   // 添加操作列
@@ -125,6 +126,11 @@ const ATable = forwardRef((props, ref) => {
 
     list = list.map((item) => ({ ...item, key: item.id }));
 
+    if (content.hasOwnProperty('pager')) {
+      // 设置分页总数
+      setPagination({ ...paginationConfig, ...{ total: +content?.pager?.totalCount }});
+    }
+
     if (typeof afterHandle === 'function') {
       afterHandle(content);
     }
@@ -158,7 +164,7 @@ const ATable = forwardRef((props, ref) => {
         loading={loading}
         bordered={bordered}
         dataSource={dataSource}
-        pagination={pagination}
+        pagination={paginationConfig}
         size={size}
       />
     </div>

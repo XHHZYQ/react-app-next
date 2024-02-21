@@ -233,7 +233,7 @@ const Table = ({ tableData = [] }) => {
       handle: (row) => {
         const { id, displayCtrl } = row;
         setMatchData((draft) => {
-          draft= id;
+          draft.id = id;
           draft.displayCtrl = displayCtrl;
         });
 
