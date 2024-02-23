@@ -1,11 +1,5 @@
 import { $post } from '../utils/request';
 
-const AdminBaseUrl = 'http://service-tdog.sjhh-test.com/saas-admin';
-const AdminHeaders = {
-  'Content-Type': 'application/json',
-  Authorization: 'c3500fdedec0a3416be7f8fd2a397381'
-};
-
 /**
  * @description 赛事列表-下拉选项
  */
@@ -60,5 +54,12 @@ export const matchStop = (params) =>
 export const matchDisplayCtrl = (params) =>
   $post({
     url: '/match-index/update-display-ctrl',
+    params
+  });
+
+/** @description 赛事修改显示控制状态 */
+export const getUserMenu = (params) =>
+  $post({
+    url: '/auth/get-user-menu',
     params
   });

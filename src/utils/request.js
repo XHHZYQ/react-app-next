@@ -69,7 +69,7 @@ instance.interceptors.request.use(config => {
   const href = window.location?.href;
   config.headers['x-referer'] = href;
   // config.headers.Authorization = token;
-  config.headers.Authorization = 'c3500fdedec0a3416be7f8fd2a397381';
+  config.headers.Authorization = 'c4c8b79c03c6b83ee02a272ae62943c3';
   return config;
 }, error => {
   return Promise.reject(error);
