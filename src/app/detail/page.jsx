@@ -10,12 +10,31 @@ const reducer = (state, action) => {
   console.log('reducer', action);
   switch (action.type) {
     case 'init': {
-      return { ...state.menu, menu: [...action.menu] };
+      return { ...state, menu: [...action.menu] };
     }
     case 'change': {
-      const list = state.menu.map(item => ({ name: item.name + '修改了' }));
-      return { ...state.menu, menu: [...list] };
+      const list = state.menu.map(item => {
+        if (!item.name.includes('修改了')) {
+          return ({ name: item.name + '修改了' })
+        } else {
+          return item;
+        }
+      });
+      return { ...state, menu: [...list] };
     }
+    case 'delete': {
+      const list = state.menu.map(item => item);
+      list.splice(action.index, 1);
+      console.log('delete menu', list);
+      return { ...state, menu: [...list] };
+    }
+      
+    case 'push': {
+      const list = state.menu.map(item => item);
+      list.splice(action.index + 1, 0, action.item);
+      return { ...state, menu: [...list] }
+    }
+      
     case 'get': {
       return state;
     }
@@ -41,6 +60,14 @@ export default () => {
     console.log('change menu', menuList);
   };
 
+  const deleteMenu = () => {
+    dispatch({ type: 'delete', index: 2 });
+  };
+
+  const pushMenu = () => {
+    dispatch({ type: 'push', index: 0, item: { name: '自定义管理' } });
+  };
+
   const getMenu = () => {
     dispatch({ type: 'get' });
     console.log('get menu', menuList);
@@ -54,6 +81,8 @@ export default () => {
       </div>
 
       <Button onClick={changeMenu}>修改</Button>
+      <Button onClick={pushMenu}>添加第一项</Button>
+      <Button onClick={deleteMenu}>删除第三项</Button>
       <Button onClick={getMenu}>获取</Button>
 
       <div className={style['detail-menu']}>
