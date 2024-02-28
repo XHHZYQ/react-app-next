@@ -1,7 +1,7 @@
 "use client"
 // import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { Provider } from 'react-redux';
-import store from '@/store'; // 导入 Redux store
+import { store } from '../store';
 import { Inter } from 'next/font/google'
 import './globals.css'
 

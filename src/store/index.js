@@ -1,31 +1,8 @@
-// store.js
-import { configureStore } from '@reduxjs/toolkit';
-import { createSlice } from '@reduxjs/toolkit';
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from './counterSlice';
 
-// 初始状态
-const initialState = {
-  count: 0
-};
-
-// 创建 slice
-const counterSlice = createSlice({
-  name: 'counter',
-  initialState,
-  reducers: {
-    increment(state) {
-      state.count++;
-    },
-    decrement(state) {
-      state.count--;
-    }
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer // 需与 counterSlice 中的 name 属性相同
   }
 });
-
-// 创建 Redux store
-const store = configureStore({
-  reducer: counterSlice.reducer
-});
-
-export const { increment, decrement } = counterSlice.actions;
-
-export default store;
