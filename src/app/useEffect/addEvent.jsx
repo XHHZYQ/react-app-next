@@ -6,7 +6,7 @@ export default () => {
 
   useEffect(() => {
     function handleMove(e) {
-      setPosition({ x: e.clientX, y: e.clientY });
+      setPosition(pre => ({...pre, x: e.clientX, y: e.clientY }));
     }
     window.addEventListener('pointermove', handleMove);
     return () => {

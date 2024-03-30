@@ -62,7 +62,7 @@
 // }
 
 
-import MyComponent from './addEvent.jsx';
+import MyComponent from './box.jsx';
 
 export default MyComponent;
 
