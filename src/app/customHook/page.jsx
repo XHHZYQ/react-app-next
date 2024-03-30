@@ -29,6 +29,6 @@
 //   );
 // }
 
-import MyComponent from "./form";
+import MyComponent from "./chatRoom/index";
 
 export default MyComponent;

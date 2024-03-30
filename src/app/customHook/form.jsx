@@ -7,7 +7,7 @@ export default function Form() {
   return (
     <>
       <label>
-        First gag name:
+        First name:
         <input {...firstNameProps} />
       </label>
       <label>
